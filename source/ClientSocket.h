@@ -3,7 +3,6 @@
 
 #include "svrEngine.h"
 #include "IOCP.h"
-#include "MemoryPool.h"
 
 class Event_handler
 {

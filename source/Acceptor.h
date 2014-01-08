@@ -21,6 +21,7 @@ protected:
 		m_connectSockets.push_back(pTask);
 	}
 private:
+	static const int		S_DEFAULT_HEARTGAP = 10;
 	int						m_nHeartCheckGap;	// 连接的心跳间隔，默认为 10 秒
 	Mutex					m_SocketPoolMutex;	
 	typedef	std::vector<ClientSocket*>	ClientTaskContainer;

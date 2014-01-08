@@ -4,7 +4,7 @@
 // SocketPool
 SocketPool::SocketPool()
 	:Thread("SocketPool HeartCheck"), 
-	m_nHeartCheckGap(10000)
+	m_nHeartCheckGap(S_DEFAULT_HEARTGAP)
 {
 
 }
