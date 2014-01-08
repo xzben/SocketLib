@@ -105,6 +105,7 @@ bool	ClientSocket::sendout(int nSendDoneSize)
 }
 bool	ClientSocket::recvDone(int nRecvDoneSize)
 {
+	refreshHeart();
 	//完成上次投递的recv操作，将接受到的内容从接受block移到接受buffer中
 	m_RecvBlock.writeData(NULL, nRecvDoneSize);//完成io写操作，主要是为了移动block的写指针位置
 	void *pDataBuffer = NULL; int nDataSize = 0;
