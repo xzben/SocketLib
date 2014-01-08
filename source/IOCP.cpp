@@ -29,6 +29,7 @@ bool IocpRecvThread::run()
 			if ( ERROR_OPERATION_ABORTED == dwErrorCode ) //Accept用于接收新连接的socket关闭
 			{
 				Logger::getInstace()->fatal("IOCPDriver >> GetQueuedCompletionStatus >> Accept用于接收新连接的socket关闭");
+				((ClientSocket*)pSock)->release();//socket 从IOCP出来要减引用，否则会导致对象删除失败
 				continue;
 			}
 			if ( IO_Accept == lpOverlapped->OperationType ) //Accept上的socket关闭，重新投递监听
