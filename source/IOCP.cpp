@@ -16,16 +16,20 @@ bool IocpRecvThread::run()
 		lpOverlapped = NULL;
 		pSock = NULL;
 
-		if( !GetQueuedCompletionStatus( IOCPDriver::getInstance()->getCompletionPortHandle(), &dwNumRead, (LPDWORD)&pSock, (LPOVERLAPPED*)&lpOverlapped, INFINITE ))
+		if( !GetQueuedCompletionStatus( IOCPDriver::getInstance()->getCompletionPortHandle(), &dwNumRead, (LPDWORD)&pSock, (LPOVERLAPPED*)&lpOverlapped, 1000 ))
 		{
 			DWORD dwErrorCode = ::GetLastError();
-			Logger::getInstace()->debug("IOCPDriver >> GetQueuedCompletionStatus 失败 >> error [%d] ", dwErrorCode);
 
+			//////////////////////////////////////////////////////////////////////////
+			//合法的错误
 			if ( WAIT_TIMEOUT == dwErrorCode ||  // 超时
 				ERROR_INVALID_HANDLE == dwErrorCode ) //启动时，未知原因非法句柄，可能是捕获到前一次程序关闭后未处理的完成事件
 			{	
 				continue;
 			}
+			//////////////////////////////////////////////////////////////////////////
+			//不正常的error
+			Logger::getInstace()->debug("IOCPDriver >> GetQueuedCompletionStatus 失败 >> error [%d] ", dwErrorCode);
 			if ( ERROR_OPERATION_ABORTED == dwErrorCode ) //Accept用于接收新连接的socket关闭
 			{
 				Logger::getInstace()->fatal("IOCPDriver >> GetQueuedCompletionStatus >> Accept用于接收新连接的socket关闭");

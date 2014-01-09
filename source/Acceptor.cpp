@@ -168,6 +168,7 @@ IOWorkFactory::~IOWorkFactory()
 		m_ThreadList.pop_back();
 		pThread->final();
 		pThread->join();
+		delete pThread;
 	}
 }
 
