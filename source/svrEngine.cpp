@@ -5,12 +5,16 @@
 //Thread
 DWORD __stdcall Thread::ThreadFunc(void *arg)
 {
-	Thread *pThead = (Thread*)arg;
-	Logger::getInstace()->debug("Thread %s is start", pThead->m_strThreadName.c_str());
+	static volatile int s_RunningThreadNumberCounter = 0;
+	s_RunningThreadNumberCounter ++;
 
+	Thread *pThead = (Thread*)arg;
+	//调试信息
+	Logger::getInstace()->debug("Thread %s is start.\r\nCurrent Thread number[%d]", pThead->m_strThreadName.c_str(), s_RunningThreadNumberCounter);
 	//线程开始运行设置运行标志
 	pThead->m_ThreadMutex.lock();
 	pThead->m_bActive = true;
+	pThead->m_bComplete = false;
 	pThead->m_ThreadMutex.unlock(); 
 	
 	//线程主回调
@@ -19,9 +23,11 @@ DWORD __stdcall Thread::ThreadFunc(void *arg)
 	//线程结束设置运行标志
 	pThead->m_ThreadMutex.lock();
 	pThead->m_bActive = false;
+	pThead->m_bComplete = true;
 	pThead->m_ThreadMutex.unlock();
 
-	Logger::getInstace()->debug("Thread %s is End", pThead->m_strThreadName.c_str());
+	s_RunningThreadNumberCounter --;
+	Logger::getInstace()->debug("Thread[%s] is End.\r\nCurrent Thread Number[%d]", pThead->m_strThreadName.c_str(), s_RunningThreadNumberCounter);
 	
 	//如果 对象时不可 Join 的则在线程结束时自动将对象删除
 	if( !pThead->isJoinable() )
@@ -64,41 +70,6 @@ bool Thread::start()
 }
 //////////////////////////////////////////////////////////////////////////
 //TCPSocket
-bool TCPSocket::s_bLoadedSockLib = false;
-bool TCPSocket::s_loadSockLib(int nHigh /* = 2 */, int nLow /* = 2 */)
-{
-	if( s_bLoadedSockLib ) //已经加载过，直接返回
-		return true;
-	s_bLoadedSockLib = true;
-
-	WORD wVersionRequested;
-	WSADATA wsaData;
-	int err;
-
-	wVersionRequested = MAKEWORD( nHigh, nLow );
-	err = WSAStartup( wVersionRequested, &wsaData );
-	if ( err != 0 ) 
-		return false;
-
-	if ( LOBYTE( wsaData.wVersion ) != nHigh 
-		|| HIBYTE( wsaData.wVersion ) != nLow )
-	{
-		WSACleanup( );
-		return false;
-	}
-	return true;
-}
-bool TCPSocket::s_destroySockLib()
-{
-	if( !s_bLoadedSockLib ) //还未加载过，或已经卸载了
-		return true; 
-
-	s_bLoadedSockLib = false;
-	if(0 != WSACleanup())
-		return false;
-
-	return true;
-}
 sockaddr_in TCPSocket::s_getSockAddrIpV4(const char* szIpAddr, const u_short usPort)
 {
 	sockaddr_in	addr;
@@ -325,7 +296,65 @@ bool TCPSocket::shutdown(int how /*= SD_BOTH*/)
 	return 0 == ::shutdown(m_hSocket, how);
 }
 
-//////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//用于自动装载 SocketLib 用
+class SocketLibLoadHelper
+{
+public:
+	SocketLibLoadHelper()
+	{
+		s_loadSockLib();
+	}
+	~SocketLibLoadHelper()
+	{
+		s_destroySockLib();
+	}
+private:
+	static bool			s_loadSockLib(int nHigh = 2, int nLow = 2);
+	static bool			s_destroySockLib();
+private:
+	static	bool		s_bLoadedSockLib;
+};
+bool SocketLibLoadHelper::s_bLoadedSockLib = false;
+bool SocketLibLoadHelper::s_loadSockLib(int nHigh /* = 2 */, int nLow /* = 2 */)
+{
+	if( s_bLoadedSockLib ) //已经加载过，直接返回
+		return true;
+	s_bLoadedSockLib = true;
+
+	WORD wVersionRequested;
+	WSADATA wsaData;
+	int err;
+
+	wVersionRequested = MAKEWORD( nHigh, nLow );
+	err = WSAStartup( wVersionRequested, &wsaData );
+	if ( err != 0 ) 
+		return false;
+
+	if ( LOBYTE( wsaData.wVersion ) != nHigh 
+		|| HIBYTE( wsaData.wVersion ) != nLow )
+	{
+		WSACleanup( );
+		return false;
+	}
+	return true;
+}
+bool SocketLibLoadHelper::s_destroySockLib()
+{
+	if( !s_bLoadedSockLib ) //还未加载过，或已经卸载了
+		return true; 
+
+	s_bLoadedSockLib = false;
+	if(0 != WSACleanup())
+		return false;
+
+	return true;
+}
+
+SocketLibLoadHelper g_socketLibLoadHelper; //定义一个全局变量，使运行环境自动装载和卸载 SocketLib
+//////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////
 //Logger
 Logger::Logger(std::string strLogName /* = "LOGGER" */, LOG_LEVEL emLevel/* = LEVEL_ERROR */)
 	:m_strLogName(strLogName), m_emLevel(emLevel)

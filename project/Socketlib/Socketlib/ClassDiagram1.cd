@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ClientStream" Collapsed="true">
+    <Position X="12.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAgAAAACCAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\main.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SocketLibLoadHelper" Collapsed="true">
+    <Position X="23.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAEAAAAAAAAAAABAAAAAAGAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.cpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SocketPool" Collapsed="true">
+    <Position X="2.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAgAAAAQCAAAAAAAAAAAAAAAAQAEBAAQAAABAEAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\Acceptor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AcceptSocket" Collapsed="true">
+    <Position X="14.75" Y="4.25" Width="1.5" />
+    <NestedTypes>
+      <Typedef Name="AcceptSocket::AcceptOverlappedData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>F:\GitHub\SocketLib\source\Acceptor.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Typedef Name="AcceptSocket::LPAcceptOverlappedData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>F:\GitHub\SocketLib\source\Acceptor.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="AcceptSocket::st_AcceptOverlappedData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>F:\GitHub\SocketLib\source\Acceptor.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QAAAAAACBAAAAAABAAAAIAABAAggAAAAAAAAAABAIAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\Acceptor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Acceptor&lt;_ClientType&gt;" Collapsed="true">
+    <Position X="14.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\Acceptor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IOTask" Collapsed="true">
+    <Position X="23.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIgAAQAAAAAAAAAAAABAAAAAABQAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\Acceptor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IOWorkThread" Collapsed="true">
+    <Position X="0.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAIBAAAAAAgAAAAAEAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\Acceptor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IOWorkFactory" Collapsed="true">
+    <Position X="7.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACACAEAAAAAgAAAAIAAAAAAAAASAEAAAAAAIQAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\Acceptor.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Event_handler" Collapsed="true">
+    <Position X="10.5" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAQAgAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\ClientSocket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ClientSocket" Collapsed="true">
+    <Position X="12.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>VAFAUAQQAKABAQIIAABAgAAAAACAARBAxAIAABAIAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\ClientSocket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IocpRecvThread" Collapsed="true">
+    <Position X="4.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IOCPDriver" Collapsed="true">
+    <Position X="14.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEgCAAACQAAAAAAgACAAIAAAgABAAASAAAAAAAAABAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NoCopyable" Collapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAEgAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Mutex" Collapsed="true">
+    <Position X="5.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAEAAAAAAAAAAAAAAAAAAAAAAAAACgAAAAAQA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AutoLock" Collapsed="true">
+    <Position X="9" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAIAAEAAAAAAAACAAAAAAAAEAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Thread" Collapsed="true">
+    <Position X="3.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAQgCABQAAACE4ABAYgBAAIAAAAAAAAAAoAQAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Allocator" Collapsed="true">
+    <Position X="21.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEBEAAAAAAAAAAAAgQIEAgAAABAACAEAAEAAAAIgAM=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MemoryPool" Collapsed="true">
+    <Position X="21.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAAAAAAAAgAEACAAAQAAAAAAAAAAAI=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AllocFromMemoryPool" Collapsed="true">
+    <Position X="8" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAQAAAAAAAAAAAAQAAAAEAAAAAAAEAgAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TCPSocket" Collapsed="true">
+    <Position X="12.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgQCiAQIAAQgQBgBAAoABABAABAAKAAIYAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IOBlock" Collapsed="true">
+    <Position X="10" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIGEEAAAABAAAABAACAAAAAQAAAACIEAQAAIAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IOBuffer" Collapsed="true">
+    <Position X="16.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABYEAEAAECBQAAEABACAAAAAAAAABCAAAAAAMAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TaskQueue&lt;_TaskType&gt;" Collapsed="true">
+    <Position X="1.75" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAgAgAAAAIAAAAAAAgAAABAABAAEAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Logger" Collapsed="true">
+    <Position X="11" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQQAQAEAkogABAAADGACBCAAAAAAAAAQAABAAAIBAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="st_OverlappedData" Collapsed="true">
+    <Position X="19.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAgBAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="apr_memnode_t" Collapsed="true">
+    <Position X="21.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAEAAAAAIAAAAAAAAAAAAAAAAAAAYBABA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Typedef Name="IOOperationType" Collapsed="true">
+    <Position X="19.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="OverlappedData" Collapsed="true">
+    <Position X="19.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="LPOverlappedData" Collapsed="true">
+    <Position X="19.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Typedef Name="uint32" Collapsed="true">
+    <Position X="21.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Typedef>
+  <Enum Name="enum_IOOperationType" Collapsed="true">
+    <Position X="19.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\IOCP.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MemSize" Collapsed="true">
+    <Position X="21.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>F:\GitHub\SocketLib\source\svrEngine.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="微软雅黑" Size="9" />
+</ClassDiagram>

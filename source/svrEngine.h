@@ -123,11 +123,11 @@ public:
 	void	usleep(const long usec) const	{ ::Sleep( usec/1000 ); }
 	//判断线程是否已经激活
 	bool	isActive()				const	{ return m_bActive;		}
-	//线程是否结束
+	//判断是否要求过结束线程
 	bool	isFinal()				const	{ return m_bComplete;	}
-	//结束线程
+	//请求结束线程
 	void	final()							{ m_bComplete = true;	}
-	//线程是否可Join 
+	//线程是否可Join, join able 的线程线程结束时，不会删除线程对象，否则在线程结束时会自动delete线程对象。 
 	bool	isJoinable()			const	{ return m_bJoinable;	}
 	//线程启动
 	bool	start();
@@ -141,11 +141,11 @@ protected:
 	static DWORD __stdcall ThreadFunc(void *arg);
 protected:
 	std::string			m_strThreadName; // 线程名
-	Mutex				m_ThreadMutex;	// 线程互斥锁
+	Mutex				m_ThreadMutex;	 // 线程互斥锁
 	volatile bool		m_bComplete;	 // 线程结束开关	
 	volatile bool		m_bActive;		 // 线程运行标志
 	HANDLE				m_hThreadHandle; // 线程句柄
-	bool				m_bJoinable;	 // 线程是否合并	
+	bool				m_bJoinable;	 // 线程是否合并
 };
 
 
@@ -273,7 +273,6 @@ public:
 	virtual bool Free(void* pMem);
 private:
 	Allocator	*m_pAllocator;
-	Mutex		m_mutex;
 };
 
 
@@ -312,12 +311,8 @@ protected:  //讲构造函数定义为保护类型，使此类不能被直接声
 class TCPSocket : public NoCopyable
 {
 public:
-	static bool			s_loadSockLib(int nHigh = 2, int nLow = 2);
-	static bool			s_destroySockLib();
 	static sockaddr_in	s_getSockAddrIpV4(const char* szIpAddr, const u_short usPort);
 	static void			s_getSockAddrIpV4(const sockaddr_in addr, std::string &szIpAddr,  u_short &usPort);
-private:
-	static	bool		s_bLoadedSockLib;
 public:
 	TCPSocket();
 	virtual ~TCPSocket();
@@ -352,7 +347,7 @@ protected:
 	bool			m_bHaveAddr;//是否包含连接对象的地址
 };
 
-class IOBlock : public AllocFromMemoryPool
+class IOBlock : public AllocFromMemoryPool, public NoCopyable
 {
 public:
 	enum	{MAX_BLOCK_SIZE = 8192 }; //block 块的大小值 byte为单位
@@ -473,7 +468,7 @@ private:
 	int				m_nReadIndex;  //block 当前的可读取位置
 };
 
-class IOBuffer
+class IOBuffer : public NoCopyable
 {
 public:
 	typedef		IOBlock							IOBlockTemplate;
@@ -751,4 +746,5 @@ private:
 	FILE			*m_fp_file;		
 	int				m_day;			//当前打开日志的是哪天的，每天一个日志文本
 };
+
 #endif//__2013_12_29_SVR_ENGINE_H__

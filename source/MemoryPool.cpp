@@ -16,9 +16,8 @@ Allocator::Allocator(size_t nMaxSize /*= APR_ALLOCATOR_MAX_FREE_UNLIMITED*/)
 }
 Allocator::~Allocator()
 {
-	if(m_mutex)
-			delete m_mutex;
-		Destroy();
+	SAFE_DELETE(m_mutex);
+	Destroy();
 }
 apr_memnode_t* Allocator::Alloc(size_t nAllocSize)
 {
@@ -209,6 +208,7 @@ bool MemoryPool::Free(void* pMem)
 	m_pAllocator->Free(node);
 	return true;
 }
+
 MemoryPool::~MemoryPool()
 {
 	if(m_pAllocator)

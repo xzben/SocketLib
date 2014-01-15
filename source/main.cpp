@@ -55,15 +55,12 @@ int main(int argc, char *argv[])
 	Logger::getInstace()->setLevel(Logger::LEVEL_DEBUG);
 	Logger::getInstace()->addLocalFileLog("SocketLib");
 
-	TCPSocket::s_loadSockLib();
-	
 	Acceptor<ClientStream> acceptor;
 	acceptor.startServer(6000);
 	
 	printf("server started......\n");
 	
-	IOCPDriver::getInstance()->wait_event_loop();
-	
-	TCPSocket::s_destroySockLib();
+	IOCPDriver::getInstance()->wait_event_loop(); //等待工作线程结束
+
 	return 0;
 }
