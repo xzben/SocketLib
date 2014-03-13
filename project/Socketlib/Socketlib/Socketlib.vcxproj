@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -11,20 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{9D469A74-5E99-4C87-B14F-CED3953657D3}</ProjectGuid>
-    <RootNamespace>Socketlib</RootNamespace>
+    <ProjectGuid>{21656FF9-9731-44FB-9120-1303BAD68B71}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SocketLib</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -36,47 +39,72 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)..\..\output\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\source\Acceptor.h" />
-    <ClInclude Include="..\..\..\source\ClientSocket.h" />
-    <ClInclude Include="..\..\..\source\config.h" />
-    <ClInclude Include="..\..\..\source\IOCP.h" />
-    <ClInclude Include="..\..\..\source\svrEngine.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\..\source\Acceptor.cpp" />
     <ClCompile Include="..\..\..\source\ClientSocket.cpp" />
+    <ClCompile Include="..\..\..\source\CObject.cpp" />
+    <ClCompile Include="..\..\..\source\COS.cpp" />
     <ClCompile Include="..\..\..\source\IOCP.cpp" />
+    <ClCompile Include="..\..\..\source\Logger.cpp" />
     <ClCompile Include="..\..\..\source\main.cpp" />
     <ClCompile Include="..\..\..\source\MemoryPool.cpp" />
-    <ClCompile Include="..\..\..\source\svrEngine.cpp" />
+    <ClCompile Include="..\..\..\source\Mutex.cpp" />
+    <ClCompile Include="..\..\..\source\Socket.cpp" />
+    <ClCompile Include="..\..\..\source\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
+    <ClInclude Include="..\..\..\source\Acceptor.h" />
+    <ClInclude Include="..\..\..\source\ClientSocket.h" />
+    <ClInclude Include="..\..\..\source\CObject.h" />
+    <ClInclude Include="..\..\..\source\config.h" />
+    <ClInclude Include="..\..\..\source\COS.h" />
+    <ClInclude Include="..\..\..\source\IOBuffer.h" />
+    <ClInclude Include="..\..\..\source\IOCP.h" />
+    <ClInclude Include="..\..\..\source\Logger.h" />
+    <ClInclude Include="..\..\..\source\MemoryPool.h" />
+    <ClInclude Include="..\..\..\source\Mutex.h" />
+    <ClInclude Include="..\..\..\source\Socket.h" />
+    <ClInclude Include="..\..\..\source\Task.h" />
+    <ClInclude Include="..\..\..\source\Thread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

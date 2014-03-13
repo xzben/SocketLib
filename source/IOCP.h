@@ -1,9 +1,9 @@
 ﻿#ifndef __2014_01_04_IOCP_H__
 #define __2014_01_04_IOCP_H__
 
-#include "svrEngine.h"
-#include <vector>
-#include <queue>
+#include "CObject.h"
+#include "Thread.h"
+#include "Socket.h"
 
 
 class ClientSocket;

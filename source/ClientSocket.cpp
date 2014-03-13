@@ -2,6 +2,7 @@
 #include "Acceptor.h"
 
 volatile unsigned int ClientSocket::s_ClientSocketCount = 0;
+
 ClientSocket::ClientSocket()
 	:m_olpWrite(IO_Write),
 	m_olpRead(IO_Read),
@@ -11,13 +12,15 @@ ClientSocket::ClientSocket()
 {
 	s_ClientSocketCount++;
 	refreshHeart();
-	Logger::getInstace()->debug("new ClientSocket current Count[%d]", s_ClientSocketCount);
+	Logger::getInstace()->debug("new ClientSocket current Count[%d]",
+		s_ClientSocketCount);
 }
 
 ClientSocket::~ClientSocket()
 {
 	s_ClientSocketCount--;
-	Logger::getInstace()->debug("delete ClientSocket current Count[%d]", s_ClientSocketCount);
+	Logger::getInstace()->debug("delete ClientSocket current Count[%d]",
+		s_ClientSocketCount);
 }
 bool ClientSocket::SendData(void *pBuffer, const int nSize)
 {

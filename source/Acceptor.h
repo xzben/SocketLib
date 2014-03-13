@@ -1,9 +1,13 @@
 ﻿#ifndef __2013_01_04_ACCEPTOR_H__
 #define __2013_01_04_ACCEPTOR_H__
 
-#include "svrEngine.h"
+#include "CObject.h"
+#include "Mutex.h"
+#include "Logger.h"
 #include "IOCP.h"
 #include "ClientSocket.h"
+#include "Task.h"
+
 
 //连接池，且连接池有心跳功能
 class SocketPool : public Thread, public TaskQueue<ClientSocket*>

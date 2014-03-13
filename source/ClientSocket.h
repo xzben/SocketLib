@@ -1,8 +1,11 @@
 ﻿#ifndef __2013_01_04_CLIENT_SOCKET_H__
 #define __2013_01_04_CLIENT_SOCKET_H__
 
-#include "svrEngine.h"
+#include "CObject.h"
+#include "Socket.h"
 #include "IOCP.h"
+#include "MemoryPool.h"
+#include "IOBuffer.h"
 
 class Event_handler
 {
@@ -18,6 +21,7 @@ public:
 	/*
 	*	有收到信的消息数据
 	*	目前返回值没有用
+	*	@ 此操作由专门的消息线程处理，不会影响IOCP处理线程。
 	*/
 	virtual	bool	OnMsg()	 = 0;
 	/*
@@ -32,10 +36,9 @@ protected:
 
 class ClientSocket : public TCPSocket, public AllocFromMemoryPool, public Event_handler
 {
-public:
 	template<class _ClientType>
 	friend class Acceptor;
-	
+
 	friend class IocpRecvThread;
 	friend class IOTask;
 	friend class AcceptSocket;
@@ -50,6 +53,7 @@ public:
 		}
 		WSABUF _wsaBuffer;	//WSARecv接收缓冲数据,传递给WSARecv()的第2个参数
 	}RWOverlappedData, *LPRWOverlappedData;
+public:
 	ClientSocket();
 	virtual ~ClientSocket();
 

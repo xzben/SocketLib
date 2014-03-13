@@ -1,7 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Socketlib", "Socketlib\Socketlib.vcxproj", "{9D469A74-5E99-4C87-B14F-CED3953657D3}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketLib", "SocketLib\SocketLib.vcxproj", "{21656FF9-9731-44FB-9120-1303BAD68B71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,10 +11,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9D469A74-5E99-4C87-B14F-CED3953657D3}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9D469A74-5E99-4C87-B14F-CED3953657D3}.Debug|Win32.Build.0 = Debug|Win32
-		{9D469A74-5E99-4C87-B14F-CED3953657D3}.Release|Win32.ActiveCfg = Release|Win32
-		{9D469A74-5E99-4C87-B14F-CED3953657D3}.Release|Win32.Build.0 = Release|Win32
+		{21656FF9-9731-44FB-9120-1303BAD68B71}.Debug|Win32.ActiveCfg = Debug|Win32
+		{21656FF9-9731-44FB-9120-1303BAD68B71}.Debug|Win32.Build.0 = Debug|Win32
+		{21656FF9-9731-44FB-9120-1303BAD68B71}.Release|Win32.ActiveCfg = Release|Win32
+		{21656FF9-9731-44FB-9120-1303BAD68B71}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
