@@ -1,0 +1,10 @@
+####key1 注释语句
+key1 = -10
+
+################key2 注释语句
+	 key2 = "assasdfadfadfadfadsfadsfadfadf" #注释语句
+	 key3 = 'aaaaaa'
+	 key4 = .134
+	
+	
+	

@@ -10,6 +10,45 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\source\Atom.h" />
+    <ClInclude Include="..\..\..\source\common.h" />
+    <ClInclude Include="..\..\..\source\Condition.h" />
+    <ClInclude Include="..\..\..\source\config.h" />
+    <ClInclude Include="..\..\..\source\ConfigFile.h" />
+    <ClInclude Include="..\..\..\source\CoroutineScheduler.h" />
+    <ClInclude Include="..\..\..\source\GlobalController.h" />
+    <ClInclude Include="..\..\..\source\LogServer.h" />
+    <ClInclude Include="..\..\..\source\MasterServer.h" />
+    <ClInclude Include="..\..\..\source\Server.h" />
+    <ClInclude Include="..\..\..\source\ServerManager.h" />
+    <ClInclude Include="..\..\..\source\Session.h" />
+    <ClInclude Include="..\..\..\source\SingleInstance.h" />
+    <ClInclude Include="..\..\..\source\SocketDriver.h" />
+    <ClInclude Include="..\..\..\source\Task.h" />
+    <ClInclude Include="..\..\..\source\DTQueue.h" />
+    <ClInclude Include="..\..\..\source\Thread.h" />
+    <ClInclude Include="..\..\..\source\TimerWorker.h" />
+    <ClInclude Include="..\..\..\source\WorkerPool.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\Atom.cpp" />
+    <ClCompile Include="..\..\..\source\Condition.cpp" />
+    <ClCompile Include="..\..\..\source\ConfigFile.cpp" />
+    <ClCompile Include="..\..\..\source\CoroutineScheduler.cpp" />
+    <ClCompile Include="..\..\..\source\GlobalController.cpp" />
+    <ClCompile Include="..\..\..\source\LogServer.cpp" />
+    <ClCompile Include="..\..\..\source\main.cpp" />
+    <ClCompile Include="..\..\..\source\MasterServer.cpp" />
+    <ClCompile Include="..\..\..\source\Server.cpp" />
+    <ClCompile Include="..\..\..\source\ServerManager.cpp" />
+    <ClCompile Include="..\..\..\source\Session.cpp" />
+    <ClCompile Include="..\..\..\source\SocketDriver.cpp" />
+    <ClCompile Include="..\..\..\source\Task.cpp" />
+    <ClCompile Include="..\..\..\source\Thread.cpp" />
+    <ClCompile Include="..\..\..\source\TimerWorker.cpp" />
+    <ClCompile Include="..\..\..\source\WorkerPool.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{21656FF9-9731-44FB-9120-1303BAD68B71}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -52,7 +91,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;SOCKETLIB_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -78,34 +117,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\source\Acceptor.cpp" />
-    <ClCompile Include="..\..\..\source\ClientSocket.cpp" />
-    <ClCompile Include="..\..\..\source\CObject.cpp" />
-    <ClCompile Include="..\..\..\source\COS.cpp" />
-    <ClCompile Include="..\..\..\source\IOCP.cpp" />
-    <ClCompile Include="..\..\..\source\Logger.cpp" />
-    <ClCompile Include="..\..\..\source\main.cpp" />
-    <ClCompile Include="..\..\..\source\MemoryPool.cpp" />
-    <ClCompile Include="..\..\..\source\Mutex.cpp" />
-    <ClCompile Include="..\..\..\source\Socket.cpp" />
-    <ClCompile Include="..\..\..\source\Thread.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\source\Acceptor.h" />
-    <ClInclude Include="..\..\..\source\ClientSocket.h" />
-    <ClInclude Include="..\..\..\source\CObject.h" />
-    <ClInclude Include="..\..\..\source\config.h" />
-    <ClInclude Include="..\..\..\source\COS.h" />
-    <ClInclude Include="..\..\..\source\IOBuffer.h" />
-    <ClInclude Include="..\..\..\source\IOCP.h" />
-    <ClInclude Include="..\..\..\source\Logger.h" />
-    <ClInclude Include="..\..\..\source\MemoryPool.h" />
-    <ClInclude Include="..\..\..\source\Mutex.h" />
-    <ClInclude Include="..\..\..\source\Socket.h" />
-    <ClInclude Include="..\..\..\source\Task.h" />
-    <ClInclude Include="..\..\..\source\Thread.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
