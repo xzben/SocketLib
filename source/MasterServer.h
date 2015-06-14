@@ -10,13 +10,6 @@
 #include "Server.h"
 #include "SingleInstance.h"
 
-// 全局日志宏
-#define LOG_DEBUG(pattern, ...)	CMasterServer::getInstance()->debug((pattern), ##__VA_ARGS__)
-#define LOG_INFO(pattern, ...)  CMasterServer::getInstance()->info((pattern),  ##__VA_ARGS__)
-#define LOG_WARN(pattern, ...)	CMasterServer::getInstance()->warn((pattern),  ##__VA_ARGS__)
-#define LOG_ERROR(pattern, ...) CMasterServer::getInstance()->error((pattern), ##__VA_ARGS__)
-#define LOG_FATAL(pattern, ...) CMasterServer::getInstance()->fatal((pattern), ##__VA_ARGS__)
-
 class CMasterServer : public CServer, public SingleInstance<CMasterServer>
 {
 public:

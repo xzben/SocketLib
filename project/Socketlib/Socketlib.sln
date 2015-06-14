@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SocketLib", "SocketLib\SocketLib.vcxproj", "{21656FF9-9731-44FB-9120-1303BAD68B71}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testserver", "..\testserver\testserver.vcxproj", "{4DDD394B-1697-41AC-A427-0374C95EBE8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{21656FF9-9731-44FB-9120-1303BAD68B71}.Debug|Win32.Build.0 = Debug|Win32
 		{21656FF9-9731-44FB-9120-1303BAD68B71}.Release|Win32.ActiveCfg = Release|Win32
 		{21656FF9-9731-44FB-9120-1303BAD68B71}.Release|Win32.Build.0 = Release|Win32
+		{4DDD394B-1697-41AC-A427-0374C95EBE8F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4DDD394B-1697-41AC-A427-0374C95EBE8F}.Debug|Win32.Build.0 = Debug|Win32
+		{4DDD394B-1697-41AC-A427-0374C95EBE8F}.Release|Win32.ActiveCfg = Release|Win32
+		{4DDD394B-1697-41AC-A427-0374C95EBE8F}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

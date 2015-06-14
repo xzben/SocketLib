@@ -18,10 +18,11 @@ class CWorkerPool : public SingleInstance<CWorkerPool>
 {
 public:
 	bool  addTask(SERVER_HANDLE server_handle, CTask* pTask);
-	void  addServer(CServer* pServer);
 	void  start();
 protected:
 	friend class SingleInstance<CWorkerPool>;
+	friend class CServer;
+	void  addServer(CServer* pServer);
 	CWorkerPool();
 	~CWorkerPool();
 private:

@@ -7,23 +7,15 @@
 #include "GlobalController.h"
 #include "MasterServer.h"
 #include "TimerWorker.h"
-#include <cstdarg>
 
-SERVER_HANDLE CServer::s_server_handle = SYS_SERVER_HANLE_END;
+SERVER_HANDLE CServer::s_server_handle = USER_SERVER_HANLE_BEGAN;
 
-CServer::CServer(SERVER_HANDLE handle)
+CServer::CServer()
 : m_bIsInGlobalQueue(false)
 , m_serverName("")
 {
-	if (handle < SYS_SERVER_HANLE_END)
-		m_server_handle = handle;
-	else
-		m_server_handle = AtomSelfAdd(&s_server_handle);
-
-	if (!CServerManager::getInstance()->registerServerByHandle(m_server_handle, this))
-	{
-		LOG_ERROR("register server by hadle failed by Handle: %d", s_server_handle);
-	}
+	m_server_handle = AtomSelfAdd(&s_server_handle);
+	CServerManager::getInstance()->registerServer(this);
 }
 
 CServer::~CServer()
@@ -65,6 +57,10 @@ bool CServer::addTask(CTask const*pTask)
 	else
 	{
 		addTask2WQueue(pTask);
+		
+		if (!isInGlobalQueue())
+			CWorkerPool::getInstance()->addServer(this);
+
 		return true;
 	}
 }
@@ -111,82 +107,19 @@ int32_t	CServer::dispatchTasks(int num)
 	return workNum;
 }
 
-void	CServer::log(const LOG_LEVEL level, const char* pattern, ...)
-{
-	va_list vp;
-	va_start(vp, pattern);
-	logva(level, pattern, vp);
-	va_end(vp);
-}
-
-void	CServer::debug(const char * pattern, ...)
-{
-	va_list vp;
-	va_start(vp, pattern);
-	logva(LOG_LEVEL::LOG_DEBUG, pattern, vp);
-	va_end(vp);
-}
-
-void	CServer::error(const char * pattern, ...)
-{
-	va_list vp;
-	va_start(vp, pattern);
-	logva(LOG_LEVEL::LOG_ERROR, pattern, vp);
-	va_end(vp);
-}
-
-void	CServer::info(const char * pattern, ...)
-{
-	va_list vp;
-	va_start(vp, pattern);
-	logva(LOG_LEVEL::LOG_INFO, pattern, vp);
-	va_end(vp);
-
-}
-
-void	CServer::fatal(const char * pattern, ...)
-{
-	va_list vp;
-	va_start(vp, pattern);
-	logva(LOG_LEVEL::LOG_FATAL, pattern, vp);
-	va_end(vp);
-}
-
-void CServer::warn(const char * pattern, ...)
-{
-	va_list vp;
-	va_start(vp, pattern);
-	logva(LOG_LEVEL::LOG_WARN, pattern, vp);
-	va_end(vp);
-}
-
-void CServer::logva(const LOG_LEVEL level, const char* pattern, va_list vp)
-{
-	LOG_LEVEL sys_level = CGlobalController::getInstance()->getLogLevel();
-	if (sys_level > level) return;
-
-	char buffer[8192];
-	int len = vsprintf(buffer, pattern, vp);
-	CData *pData = new CData;
-	pData->push<char*>(buffer);
-	CWorkerPool::getInstance()->addTask(SERVER_HANDLE_LOG, CTask::create(TaskType::SYS_LOG, 0, getServerHandle(), pData));
-	pData->release();
-}
-
-void CServer::timeout(uint32_t delay_msec, SERVER_TIMEOUT_CALLBACK callback, CData *pData /*=nullptr*/)
-{
-	SESSION_ID session_id = newTimeOutSession(callback);
-	CTimerWorker::getInstance()->addTimeout(delay_msec, m_server_handle, session_id);
-
-}
-
-void CServer::timeout(uint32_t delay_msec, NORMAL_TIMEOUT_CALLBACK callback, CData *pData /*=nullptr*/)
-{
-	SESSION_ID session_id = newTimeOutSession(callback);
-	CTimerWorker::getInstance()->addTimeout(delay_msec, m_server_handle, session_id);
-}
-
 void CServer::collectStopTask(CTask const *pTask)
 {
 	CTask::free(pTask);
+}
+
+void	CServer::timeout( uint32_t delay_msec, SERVER_TIMEOUT_CALLBACK callback, CData *pData /*= nullptr*/)
+{
+	SESSION_ID session_id = newTimeOutSession(callback);
+	CTimerWorker::getInstance()->addTimeout(delay_msec, m_server_handle, session_id);
+}
+
+void	CServer::timeout(uint32_t delay_msec, NORMAL_TIMEOUT_CALLBACK callback, CData *pData /*= nullptr*/)
+{
+	SESSION_ID session_id = newTimeOutSession(callback);
+	CTimerWorker::getInstance()->addTimeout(delay_msec, m_server_handle, session_id);
 }

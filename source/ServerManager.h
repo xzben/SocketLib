@@ -19,12 +19,10 @@ public:
 	CServer*	getServerByHandle(SERVER_HANDLE server_handle);
 	CServer*	getServerByName(std::string server_name);
 	//每个服务都必定注册了它的句柄，但是不一定注册了名字
-	bool		registerServerByHandle(SERVER_HANDLE server_handle, CServer *pserver);
+	bool		registerServer( CServer *pserver);
 	bool		registerServerByName(std::string server_name, CServer *pserver);
 	void		unregisterServer(CServer *pServer);
 	uint32_t	getCurServerNum();
-	//回收服务
-	void		clearServer(CServer* pServer);
 protected:
 	friend class SingleInstance<CServerManager>;
 	CServerManager();

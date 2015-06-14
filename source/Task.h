@@ -11,7 +11,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include "Atom.h"
+#include "Ref.h"
 
 class DataBlockBase
 {
@@ -42,26 +42,18 @@ private:
 };
 
 
-class CData
+class CData : public CRef
 {
 public:
 	CData()
 	{
-		m_ref = new int(1);
+		
+	}
+	virtual ~CData()
+	{
+		clear();
 	}
 
-	void retain()
-	{
-		AtomSelfAdd(m_ref);
-	}
-
-	void release()
-	{
-		if (AtomSelfDec(m_ref) <= 0)
-		{
-			delete this;
-		}
-	}
 	inline int getSize()
 	{
 		return m_datas.size();
@@ -126,13 +118,8 @@ private:
 
 	template<>
 	const char* pop<const char*, 0>();
-	~CData()
-	{
-		clear();
-		SAFE_DELETE(m_ref);
-	}
+	
 	std::vector<DataBlockBase*>	m_datas;
-	int *m_ref;
 };
 
 class CTask

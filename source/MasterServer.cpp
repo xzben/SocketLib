@@ -4,7 +4,6 @@
 #include "GlobalController.h"
 
 CMasterServer::CMasterServer()
-:CServer(SERVER_HANDLE_MASTER)
 {
 	m_count = 0;
 }
@@ -13,6 +12,7 @@ CMasterServer::~CMasterServer()
 {
 
 }
+
 
 void CMasterServer::initInstance()
 {

@@ -86,7 +86,7 @@ void WorkThreadPool::run(uint32_t id)
 				//服务器标记结束了，且服务的任务执行完了则结束任务
 				if (CGlobalController::getInstance()->isSystemStop() && pServer->getSize() <= 0)
 				{
-					CServerManager::getInstance()->clearServer(pServer);
+					pServer->release();
 				}
 			}
 			this->checkQueue(container, EXCUTE_SERVER_NUM);
@@ -116,17 +116,14 @@ bool WorkThreadPool::addTask(SERVER_HANDLE server_handle, CTask* pTask)
 		return false;
 	}
 	
-	if (pServer->addTask(pTask) && !pServer->isInGlobalQueue())
-	{
-		addServer(pServer);
-	}
+	pServer->addTask(pTask);
 
 	return true;
 }
 //////////////////////////////////////////////////////////////////////////
 CWorkerPool::CWorkerPool()
 {
-	uint32_t nWorkerNum = CGlobalController::getInstance()->getWorkThreadNum();
+	uint32_t nWorkerNum = CGlobalController::getInstance()->getConfig()->getInt("workThread", 8);
 	m_pCore = new WorkThreadPool(nWorkerNum);
 }
 

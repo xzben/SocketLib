@@ -12,6 +12,8 @@
 #include <string>
 #include "config.h"
 
+
+
 /*************************************************
 **	系统中使用的 DELETE 安全宏定义				**
 **************************************************/
@@ -24,12 +26,10 @@ typedef uint32_t	SESSION_ID; //每个服务的一个操作标示ID
 
 enum : SERVER_HANDLE
 {
-	SERVER_HANDLE_LOG = 1,
-	SERVER_HANDLE_TIMER,
-	SERVER_HANDLE_MASTER,
+	GLOBAL_LOG_HANDLE = 0,
 	//////////////////////////////////////////////////////////////////////////
 	//must be last
-	SYS_SERVER_HANLE_END,
+	USER_SERVER_HANLE_BEGAN = 10,
 };
 
 enum LOG_LEVEL

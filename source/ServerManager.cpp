@@ -11,14 +11,6 @@ CServerManager::~CServerManager()
 
 }
 
-void CServerManager::clearServer(CServer* pServer)
-{
-	if (pServer->getServerHandle() >= SYS_SERVER_HANLE_END)
-	{
-		SAFE_DELETE(pServer);
-	}
-}
-
 uint32_t CServerManager::getCurServerNum()
 {
 	return AtomGet(&m_curServerCount);
@@ -54,9 +46,13 @@ CServer* CServerManager::getServerByName(std::string server_name)
 	return pRet;
 }
 
-bool CServerManager::registerServerByHandle(SERVER_HANDLE server_handle, CServer *pserver)
+bool CServerManager::registerServer(CServer *pserver)
 {
+	if (pserver == nullptr)
+		return false;
+
 	bool bRet = true;
+	SERVER_HANDLE server_handle = pserver->getServerHandle();
 
 	m_lockHandle.lock();
 	auto it = m_handle2Server.find(server_handle);
@@ -65,6 +61,7 @@ bool CServerManager::registerServerByHandle(SERVER_HANDLE server_handle, CServer
 	else
 	{
 		m_handle2Server.insert(ConHandle2Server::value_type(server_handle, pserver));
+		pserver->retain();
 	}
 	m_lockHandle.unlock();
 	if (bRet)
@@ -117,6 +114,9 @@ void CServerManager::unregisterServerByHandle(SERVER_HANDLE server_handle)
 }
 void CServerManager::unregisterServer(CServer *pServer)
 {
+	if (pServer == nullptr)
+		return;
+
 	SERVER_HANDLE server_handle = pServer->getServerHandle();
 	std::string   server_name = pServer->getServerName();
 

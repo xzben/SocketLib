@@ -7,19 +7,39 @@
 #include "TimerWorker.h"
 #include "GlobalController.h"
 
+
 CLogServer::CLogServer()
-:CServer(SERVER_HANDLE_LOG)
 {
 	m_fp_console = stdout;
 	m_fp_file = nullptr;
 	m_day = 0;
-	m_file = CGlobalController::getInstance()->getLogFileName();
+	m_file  = CGlobalController::getInstance()->getConfig()->getString("logFile", "");
+	m_level = getLevelByString(CGlobalController::getInstance()->getConfig()->getString("logLevel", "off"));
 }
 
 CLogServer::~CLogServer()
 {
 
 }
+
+LOG_LEVEL CLogServer::getLevel()
+{
+	return m_level;
+}
+
+LOG_LEVEL CLogServer::getLevelByString(std::string level)
+{
+	if (level == "all") return LOG_ALL;
+	else if (level == "debug") return LOG_DEBUG;
+	else if (level == "info") return LOG_INFO;
+	else if (level == "warn") return LOG_WARN;
+	else if (level == "error") return LOG_ERROR;
+	else if (level == "fatal") return LOG_FATAL;
+	else if (level == "off") return LOG_OFF;
+
+	return LOG_OFF;
+}
+
 
 void CLogServer::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE source, CData *pData)
 {

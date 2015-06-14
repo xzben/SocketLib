@@ -11,41 +11,34 @@
 #include "Session.h"
 #include "common.h"
 #include "Task.h"
+#include "Ref.h"
 
 class CTask;
 
-class CServer : public CSession, public DTQueue<CTask const*>
+class CServer : public CSession, public CRef, public DTQueue<CTask const*>
 {
 public:
-	CServer(SERVER_HANDLE handle = SYS_SERVER_HANLE_END);
+	CServer();
 	virtual ~CServer();
 
 	SERVER_HANDLE	getServerHandle() const { return m_server_handle; }
 	std::string		getServerName();
 	bool			setServerName(std::string name);
-
-	void			timeout(uint32_t delay_msec, SERVER_TIMEOUT_CALLBACK callback, CData *pData = nullptr);
-	void			timeout(uint32_t delay_msec, NORMAL_TIMEOUT_CALLBACK callback, CData *pData = nullptr);
-	void			log(const LOG_LEVEL level, const char* pattern, ...);
-
-	void			debug(const char * pattern, ...);
-	void			info(const char * pattern, ...);
-	void			warn(const char * pattern, ...);
-	void			error(const char * pattern, ...);
-	void			fatal(const char * pattern, ...);
+	
 
 	virtual void	setFlagInGlobalQueue();
 	virtual void	clearFlagInGlobalQueue();
 	virtual bool	isInGlobalQueue();
+	bool			addTask(CTask const *pTask);
+
+	void			timeout(uint32_t delay_msec, SERVER_TIMEOUT_CALLBACK callback, CData *pData = nullptr);
+	void			timeout(uint32_t delay_msec, NORMAL_TIMEOUT_CALLBACK callback, CData *pData = nullptr);
 protected:
-	void			logva(const LOG_LEVEL level, const char* pattern, va_list vp);
 	//正常情况下执行一个任务
 	virtual void	excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE source, CData *pData) = 0;
 	//用于收集当服务器停止时收到的任务，默认处理是直接释放任务
 	virtual void	collectStopTask(CTask const *pTask);
-private:
 	friend class	WorkThreadPool;
-	bool			addTask(CTask const *pTask);
 	int32_t			dispatchTasks(int num);
 protected:
 	uint32_t				m_bIsInGlobalQueue;

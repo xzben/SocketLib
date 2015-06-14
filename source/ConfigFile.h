@@ -14,24 +14,16 @@
 class CConfigFile
 {
 public:
-	static CConfigFile* getInstance()
-	{
-		static CConfigFile s_instance;
-		return &s_instance;
-	}
-
-	bool init(const char* file);
-	void dumpConfigs();
-	int		getInt(const char *key, int default);
-	double	getDouble(const char *key, double default);
-	std::string  getString(const char* key, std::string default);
-protected:
 	CConfigFile();
 	~CConfigFile();
 
-	
-	
-	int checkValue(char *line);
+	bool init(const char* file);
+	void			dumpConfigs();
+	int				getInt(const char *key, int default);
+	double			getDouble(const char *key, double default);
+	std::string		getString(const char* key, std::string default);
+protected:
+	int	 checkValue(char *line);
 	bool checkKeyValid(char* key);
 	bool checkValueValid(char	*& value);
 private:

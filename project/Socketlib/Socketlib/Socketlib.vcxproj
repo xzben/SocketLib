@@ -20,6 +20,7 @@
     <ClInclude Include="..\..\..\source\GlobalController.h" />
     <ClInclude Include="..\..\..\source\LogServer.h" />
     <ClInclude Include="..\..\..\source\MasterServer.h" />
+    <ClInclude Include="..\..\..\source\Ref.h" />
     <ClInclude Include="..\..\..\source\Server.h" />
     <ClInclude Include="..\..\..\source\ServerManager.h" />
     <ClInclude Include="..\..\..\source\Session.h" />
@@ -40,6 +41,7 @@
     <ClCompile Include="..\..\..\source\LogServer.cpp" />
     <ClCompile Include="..\..\..\source\main.cpp" />
     <ClCompile Include="..\..\..\source\MasterServer.cpp" />
+    <ClCompile Include="..\..\..\source\Ref.cpp" />
     <ClCompile Include="..\..\..\source\Server.cpp" />
     <ClCompile Include="..\..\..\source\ServerManager.cpp" />
     <ClCompile Include="..\..\..\source\Session.cpp" />
