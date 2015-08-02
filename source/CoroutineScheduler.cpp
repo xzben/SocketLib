@@ -1,7 +1,7 @@
 #include "CoroutineScheduler.h"
 #include "common.h"
 
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 #define _WIN32_WINNT 0x0501
 #include<windows.h>
 #else
@@ -31,7 +31,7 @@ struct coroutine
 	CCoroutineScheduler* sch;
 	coroutine_func func;
 	void *context;
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	HANDLE fiber;
 #else
 	char *stack;
@@ -43,7 +43,7 @@ struct coroutine
 
 typedef struct coroutine *cort_t;
 
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 static void WINAPI _proxyfunc(void *p)
 {
 	cort_t co = (cort_t)p;
@@ -55,7 +55,7 @@ static void _proxyfunc(uint32_t low32, uint32_t hi32)
 #endif
 	co->func(co->sch, co->context);
 	co->state = COROUTINE_END;
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	SwitchToFiber(co->main->fiber);
 #endif
 }
@@ -156,7 +156,7 @@ cort_t	CoSchedulerImplement::newMainCoroutine()
 	co->func = nullptr;
 	co->context = nullptr;
 
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	co->fiber = ConvertThreadToFiber(NULL);
 #endif
 
@@ -165,7 +165,7 @@ cort_t	CoSchedulerImplement::newMainCoroutine()
 
 void	CoSchedulerImplement::deleteMainCorouitine()
 {
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	ConvertFiberToThread();
 #endif
 	free(m_main);
@@ -180,7 +180,7 @@ cort_t	CoSchedulerImplement::_newCoroutine(coroutine_func func, void* context)
 	co->func = func;
 	co->context = context;
 	co->main = m_main;
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	co->fiber = CreateFiber(0, _proxyfunc, co);
 #else
 	co->stacksize = STACK_SIZE;
@@ -199,7 +199,7 @@ cort_t	CoSchedulerImplement::_newCoroutine(coroutine_func func, void* context)
 
 void	CoSchedulerImplement::deleteCoroutine(cort_t co)
 {
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	DeleteFiber(co->fiber);
 #else
 	free(co->stack);
@@ -215,7 +215,7 @@ CO_ID	CoSchedulerImplement::newCoroutine(coroutine_func func, void* context)
 
 void	CoSchedulerImplement::switchCoroutine(cort_t from, cort_t to)
 {
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 	SwitchToFiber(to->fiber);
 #else
 	swapcontext(&from->uctx, &to->uctx);

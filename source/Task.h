@@ -80,9 +80,9 @@ public:
 	}
 
 	template<typename Type, int index>
-	Type	pop()
+	Type	pop(Type defValue)
 	{
-		Type ret;
+		Type ret = defValue;
 		
 		if (index < getSize())
 		{
@@ -91,12 +91,12 @@ public:
 
 			if (ptr != nullptr)
 			{
-				return ptr->getData();
+				ret = ptr->getData();
 			}
 		}
 		else
 		{
-			socketlib_error("try to pop an empty CData!!:" __FUNCDNAME__);
+			socketlib_error("try to pop an empty CData!!: %s", __FUNCDNAME__);
 		}
 		return ret;
 	}
@@ -114,10 +114,10 @@ private:
 	}
 	//Ω˚”√char* ¿‡–Õ
 	template<>
-	char* pop<char*, 0>();
+	char* pop<char*, 0>(char*);
 
 	template<>
-	const char* pop<const char*, 0>();
+	const char* pop<const char*, 0>(const char *);
 	
 	std::vector<DataBlockBase*>	m_datas;
 };

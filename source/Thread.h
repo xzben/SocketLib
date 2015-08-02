@@ -15,6 +15,7 @@ class CThread
 public:
 	CThread();
 	~CThread();
+	static void sleep(uint32_t milsecond);
 
 	virtual bool start();
 	virtual void run() = 0;

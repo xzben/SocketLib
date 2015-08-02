@@ -1,132 +1,181 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
+    <Filter Include="base">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="socket">
+      <UniqueIdentifier>{22e72985-f30d-4b01-9442-d24c4df1585f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\source\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\TimerWorker.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\SocketDriver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\WorkerPool.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\Thread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\Task.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\Condition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\ServerManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\Server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\source\Atom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\GlobalController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\SingleInstance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\DTQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\LogServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\MasterServer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\CoroutineScheduler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\Session.h">
-      <Filter>Header Files</Filter>
+      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\common.h">
-      <Filter>Header Files</Filter>
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\Condition.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\config.h">
+      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\ConfigFile.h">
-      <Filter>Header Files</Filter>
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\CoroutineScheduler.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\DTQueue.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\GlobalController.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\LogServer.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\MasterServer.h">
+      <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\Ref.h">
-      <Filter>Header Files</Filter>
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\Server.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\ServerManager.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\Session.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\SingleInstance.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\Task.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\Thread.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\TimerWorker.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\WorkerPool.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\socket_addr.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\socket_handle.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\socket_option.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\time_value.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\iocp.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\IODriver.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\socket.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\SocketDriver.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\package.h">
+      <Filter>socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\CWatchDog.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\epoll.h">
+      <Filter>socket</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\source\main.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\TimerWorker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\SocketDriver.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\WorkerPool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Thread.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Condition.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\ServerManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\Atom.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\GlobalController.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Task.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\LogServer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\MasterServer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\CoroutineScheduler.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Session.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\ConfigFile.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Ref.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\socket_addr.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\socket_handle.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\socket_option.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\time_value.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\iocp.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\socket.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\SocketDriver.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\package.cpp">
+      <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\CWatchDog.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\epoll.cpp">
+      <Filter>socket</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

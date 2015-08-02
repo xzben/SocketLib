@@ -23,7 +23,6 @@ public:
 	}
 	virtual void initInstance(){}
 protected:
-	friend class SingleInstanceManager;
 	SingleInstance(){};
 	virtual ~SingleInstance(){};
 

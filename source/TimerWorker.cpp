@@ -6,7 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <mutex>
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 #include <windows.h>
 #else
 #include <sys/time.h>
@@ -22,7 +22,7 @@
 #define TIMER_LEVEL_MASK				(TIMER_LEVEL-1)
 //////////////////////////////////////////////////////////////////////////
 // 华丽分割线 // 一下为内部实现的细节部分
-#ifdef WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32) 
 int gettimeofday(struct timeval *tp, void *tzp)
 {
 	time_t clock;

@@ -7,7 +7,7 @@
 #ifndef __2015_03_29_CONFIG_H__
 #define __2015_03_29_CONFIG_H__
 
-#define PLATFROM＿UNKNOW		0	//未知	  系统
+#define PLATFROM_UNKNOW		0	//未知	  系统
 #define PLATFORM_WIN32		1	//Windows 系统
 #define PLATFROM_LINUX		2	//Linux	  系统
 #define PlATFROM_MAC		3	//Mac	  系统
@@ -20,7 +20,7 @@
 	#elif defined(MAC)
 		#define CUR_PLATFROM	PlATFROM_MAC
 	#else
-		#define CUR_PLATFROM	PLATFROM＿UNKNOW
+		#define CUR_PLATFROM	PLATFROM_UNKNOW
 	#endif
 #endif//--!!CUR_PLATFROM
 

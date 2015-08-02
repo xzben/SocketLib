@@ -12,6 +12,11 @@ void  ThreadFunc(void* param)
 	pObj->m_bIsStart = false;
 }
 
+void CThread::sleep(uint32_t milsecond)
+{
+	std::this_thread::sleep_for(std::chrono::milliseconds(milsecond));
+}
+
 CThread::CThread()
 : m_bIsFinish(false)
 , m_bIsStart(false)

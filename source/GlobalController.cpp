@@ -2,7 +2,7 @@
 #include "WorkerPool.h"
 #include "ServerManager.h"
 #include "TimerWorker.h"
-
+#include "Atom.h"
 #include <cstdarg>
 #include <iostream>
 #include <thread>
@@ -112,4 +112,14 @@ void CGlobalController::timeout(SERVER_HANDLE source, uint32_t delay_msec, NORMA
 {
 	CServer *server = CServerManager::getInstance()->getServerByHandle(source);
 	if (server != nullptr)	server->timeout(delay_msec, callback, pData);
+}
+
+void CGlobalController::addRunThread()
+{
+	AtomSelfAdd(&m_nRunThreadNum); 
+}
+
+void CGlobalController::decRunThread()
+{ 
+	AtomSelfDec(&m_nRunThreadNum); 
 }

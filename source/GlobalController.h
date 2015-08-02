@@ -11,17 +11,49 @@
 #include "SingleInstance.h"
 #include "Condition.h"
 #include "common.h"
-#include "Atom.h"
 #include "LogServer.h"
 #include "ConfigFile.h"
 #include <map>
 
+#if (CUR_PLATFROM == PLATFORM_WIN32)
+#define __FUNCTION_NAME__	__FUNCTION__
+#elif (CUR_PLATFROM == PLATFROM_LINUX )
+	#define __FUNCTION_NAME__	__func__
+#endif
+
+#define LOG_DETAIL( func ) \
+	;//func(GLOBAL_LOG_HANDLE, "[ %s | %d ] >> %s", __FILE__, __LINE__, __FUNCTION_NAME__);
+
 // 全局日志宏
-#define LOG_DEBUG(pattern, ...)	CGlobalController::getInstance()->debug(GLOBAL_LOG_HANDLE, (pattern), ##__VA_ARGS__)
-#define LOG_INFO(pattern, ...)  CGlobalController::getInstance()->info(GLOBAL_LOG_HANDLE,  (pattern),  ##__VA_ARGS__)
-#define LOG_WARN(pattern, ...)	CGlobalController::getInstance()->warn(GLOBAL_LOG_HANDLE,  (pattern),  ##__VA_ARGS__)
-#define LOG_ERROR(pattern, ...) CGlobalController::getInstance()->error(GLOBAL_LOG_HANDLE, (pattern), ##__VA_ARGS__)
-#define LOG_FATAL(pattern, ...) CGlobalController::getInstance()->fatal(GLOBAL_LOG_HANDLE, (pattern), ##__VA_ARGS__)
+#define LOG_DEBUG(pattern, ...)	\
+	{ \
+	LOG_DETAIL(CGlobalController::getInstance()->debug); \
+	CGlobalController::getInstance()->debug(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
+	}
+
+#define LOG_INFO(pattern, ...)  \
+	{\
+	LOG_DETAIL(CGlobalController::getInstance()->info); \
+	CGlobalController::getInstance()->info(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
+	}
+
+#define LOG_WARN(pattern, ...)	\
+	{\
+	LOG_DETAIL(CGlobalController::getInstance()->warn); \
+	CGlobalController::getInstance()->warn(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
+	}
+
+#define LOG_ERROR(pattern, ...) \
+	{ \
+	LOG_DETAIL(CGlobalController::getInstance()->error); \
+	CGlobalController::getInstance()->error(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
+	}
+
+#define LOG_FATAL(pattern, ...) \
+	{ \
+	LOG_DETAIL(CGlobalController::getInstance()->fatal); \
+	CGlobalController::getInstance()->fatal(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
+	}
 
 class CGlobalController : public SingleInstance<CGlobalController>
 {
@@ -47,8 +79,8 @@ protected:
 	void			logva(SERVER_HANDLE source, const LOG_LEVEL level, const char* pattern, va_list vp);
 
 
-	void			addRunThread(){ AtomSelfAdd(&m_nRunThreadNum); }
-	void			decRunThread(){ AtomSelfDec(&m_nRunThreadNum); }
+	void			addRunThread();
+	void			decRunThread();
 	CGlobalController();
 	virtual ~CGlobalController();
 private:

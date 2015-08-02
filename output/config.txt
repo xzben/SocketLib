@@ -1,2 +1,3 @@
-key1 = 10
-key2 = assasdfadfadfadfadsfadsfadfadf
+logFile 	= "log"
+logLevel 	= "debug"
+workThread 	= 8 

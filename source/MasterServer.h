@@ -10,6 +10,7 @@
 #include "Server.h"
 #include "SingleInstance.h"
 
+class CWatchDog;
 class CMasterServer : public CServer, public SingleInstance<CMasterServer>
 {
 public:
@@ -24,5 +25,6 @@ protected:
 	void CALLBACK tick(CData *pData);
 private:
 	int		m_count;
+	CWatchDog* m_pWatchDog;
 };
 #endif//__2015_04_11_MASTER_SERVER_H__

@@ -2,6 +2,8 @@
 #include <cassert>
 #include "TimerWorker.h"
 #include "GlobalController.h"
+#include "SocketDriver.h"
+#include "CWatchDog.h"
 
 CMasterServer::CMasterServer()
 {
@@ -10,13 +12,14 @@ CMasterServer::CMasterServer()
 
 CMasterServer::~CMasterServer()
 {
-
+	SAFE_DELETE(m_pWatchDog);
 }
 
 
 void CMasterServer::initInstance()
 {
 	timeout(100, SERVER_TIMEOUT_SELECTOR(CMasterServer::tick));
+	m_pWatchDog = new CWatchDog(6000);
 }
 
 void CALLBACK CMasterServer::tick(CData *pData)
@@ -27,7 +30,9 @@ void CALLBACK CMasterServer::tick(CData *pData)
 		timeout(100, SERVER_TIMEOUT_SELECTOR(CMasterServer::tick));
 	}
 	else
-		CGlobalController::getInstance()->stopSystem();
+	{
+		//CGlobalController::getInstance()->stopSystem();
+	}
 	m_count++;
 
 }

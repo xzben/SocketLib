@@ -8,11 +8,33 @@
 #define __2015_04_14_COMMON_H__
 
 #include <cstdint>
+#include <cassert>
 #include <queue>
 #include <string>
 #include "config.h"
 
 
+/*************************************************
+**	系统中使用的 ASSERT 宏定义					**
+**************************************************/
+//只在DEBUG下有效，__express 只有在debug下才执行
+#define	ASSERT(__express)					assert((__express));
+//__express 总是会执行，但只有debug的时候才会产生 assert
+#define VERIFY(__express)					if( !(__express) ) { ASSERT(false); }
+
+
+/*************************************************
+**	系统中使用的 设置状态标记 					**
+**************************************************/
+#define	SET_BIT(_dwCntrl, _bit)				((_dwCntrl)|(_bit))
+#define GET_BIT(_dwCntrl, _bit)				((_dwCntrl)&(_bit))
+#define DEL_BIT(_dwCntrl, _bit)				((_dwCntrl)&(~(_bit)))
+
+#define SET_DEL_BIT(_dwCntrl, _bit, _bSet)	((_bSet) ? SET_BIT(_dwCntrl, _bit) : DEL_BIT(_dwCntrl, _bit))
+#define QUERY_IS_SET_BIT(_dwCntrl, _bit)	GET_BIT(_dwCntrl, _bit)
+
+#define SET_PTR_VALUE_SAFE(_ptr, _val)		if(nullptr != _ptr) { *_ptr = _val; }
+#define SET_PTR_VALUE_SAFE(_ptr, _val)		if(nullptr != _ptr) { *_ptr = _val; }
 
 /*************************************************
 **	系统中使用的 DELETE 安全宏定义				**
@@ -20,13 +42,18 @@
 #define	SAFE_DELETE(__ptr)					if( nullptr != (__ptr) ) { delete __ptr; __ptr = nullptr; }
 #define SAFE_DELETE_ARR(__ptr)				if( nullptr != (__ptr) ) { delete[] __ptr; __ptr = nullptr; }
 
-#define socketlib_error( err_msg )					(err_msg);
+#define socketlib_error( fmt, ... )			printf(fmt, ##__VA_ARGS__)
+
 typedef uint32_t	SERVER_HANDLE; //服务标示句柄
 typedef uint32_t	SESSION_ID; //每个服务的一个操作标示ID
 
+typedef int32_t		socklen_t;
+
 enum : SERVER_HANDLE
 {
-	GLOBAL_LOG_HANDLE = 0,
+	INVALID_SERVER_HANDLE = 0,
+	GLOBAL_LOG_HANDLE = 1,
+	SOCKET_DRIVER_HANDLE = 2,
 	//////////////////////////////////////////////////////////////////////////
 	//must be last
 	USER_SERVER_HANLE_BEGAN = 10,
@@ -48,6 +75,9 @@ enum TaskType
 	EMPTY = 0,
 	TIME_OUT,
 	SYS_LOG,
+
+	TSK_SOCKET,
 };
+
 
 #endif//__2015_04_14_COMMON_H__

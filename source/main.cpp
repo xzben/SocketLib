@@ -1,12 +1,9 @@
 #include <iostream>
-#include "config.h"
 #include "TimerWorker.h"
 #include "WorkerPool.h"
 #include "SocketDriver.h"
 #include "GlobalController.h"
 #include "MasterServer.h"
-#include <windows.h>
-#include <iostream>
 using namespace std;
 
 int main(int argc, char* argv[])
@@ -32,6 +29,7 @@ int main(int argc, char* argv[])
 	CSocketDriver::getInstance()->start();
 	CTimerWorker::getInstance()->start();
 	
+	CMasterServer::getInstance();
 	CGlobalController::getInstance()->waitSystemStop();
 	
 	return 0;
