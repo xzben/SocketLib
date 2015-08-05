@@ -117,7 +117,7 @@ bool WorkThreadPool::addTask(SERVER_HANDLE server_handle, CTask* pTask)
 	}
 	
 	pServer->addTask(pTask);
-
+	m_signalNewTask.notify_all();
 	return true;
 }
 //////////////////////////////////////////////////////////////////////////

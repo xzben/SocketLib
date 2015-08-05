@@ -196,6 +196,12 @@ int32_t  CSocketDriver::reject(SOCKET_HANDLE sock)
 	return 0;
 }
 
+void CSocketDriver::close(SOCKET_HANDLE sock)
+{
+	Socket socket(sock);
+	socket.close();
+}
+
 void CSocketDriver::run()
 {
 	ThreadGuard guard;

@@ -1,3 +1,3 @@
 logFile 	= "log"
-logLevel 	= "debug"
+logLevel 	= "info"
 workThread 	= 8 

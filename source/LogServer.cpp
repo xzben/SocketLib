@@ -11,7 +11,7 @@
 CLogServer::CLogServer()
 {
 	m_fp_console = stdout;
-	m_fp_file = nullptr;
+	m_fp_file = NULL;
 	m_day = 0;
 	m_file  = CGlobalController::getInstance()->getConfig()->getString("logFile", "");
 	m_level = getLevelByString(CGlobalController::getInstance()->getConfig()->getString("logLevel", "off"));
@@ -19,7 +19,11 @@ CLogServer::CLogServer()
 
 CLogServer::~CLogServer()
 {
-
+	if (NULL != m_fp_file)
+	{
+		fflush(m_fp_file);
+		fclose(m_fp_file);
+	}
 }
 
 LOG_LEVEL CLogServer::getLevel()
@@ -54,6 +58,7 @@ void CLogServer::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE 
 		{
 			if (NULL != m_fp_file)
 			{
+				fflush(m_fp_file);
 				fclose(m_fp_file);
 			}
 			m_day = now.tm_mday;

@@ -269,4 +269,5 @@ int32_t EpollDriver::poll_recv(SOCKET_HANDLE sock)
 
 	return 0;
 }
+
 #endif//(CUR_PLATFROM == PLATFROM_LINUX)

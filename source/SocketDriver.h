@@ -35,6 +35,7 @@ public:
 	int32_t  send(SOCKET_HANDLE sock, void* buffer, int sz);
 	int32_t  accept(SERVER_HANDLE server, SOCKET_HANDLE sock);
 	int32_t  reject(SOCKET_HANDLE sock);
+	void	 close(SOCKET_HANDLE sock);
 protected:
 	friend class SingleInstance<CSocketDriver>;
 	CSocketDriver();

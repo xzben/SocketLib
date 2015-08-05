@@ -2,6 +2,7 @@
 #include "WorkerPool.h"
 #include "ServerManager.h"
 #include "TimerWorker.h"
+#include "SocketDriver.h"
 #include "Atom.h"
 #include <cstdarg>
 #include <iostream>

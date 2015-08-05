@@ -10,6 +10,7 @@
 #include "Server.h"
 #include "SingleInstance.h"
 
+
 class CWatchDog;
 class CMasterServer : public CServer, public SingleInstance<CMasterServer>
 {
@@ -23,6 +24,7 @@ protected:
 	virtual void excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE source, CData *pData)override;
 protected:
 	void CALLBACK tick(CData *pData);
+
 private:
 	int		m_count;
 	CWatchDog* m_pWatchDog;

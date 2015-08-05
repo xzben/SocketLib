@@ -58,14 +58,16 @@ void CWatchDog::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE s
 
 void CWatchDog::handleAccept(SOCKET_HANDLE sock, std::string &RemoteIp)
 {
-	LOG_INFO("handle socket accept [%d] address[%s]", sock, RemoteIp.c_str());
+	static int count = 0;
+	LOG_INFO("handle socket accept [%d] address[%s] [%d]", sock, RemoteIp.c_str(), count++);
 	CSocketDriver::getInstance()->accept(getServerHandle(), sock);
-	
+
 }
 
 void CWatchDog::handleClose(SOCKET_HANDLE sock)
 {
-	LOG_INFO("handle socket close [%d]", sock);
+	static int count = 0;
+	LOG_INFO("handle socket close [%d] [%d]", sock, count++);
 }
 
 void CWatchDog::handleMsg(SOCKET_HANDLE sock, Package* package)

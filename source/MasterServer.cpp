@@ -18,7 +18,7 @@ CMasterServer::~CMasterServer()
 
 void CMasterServer::initInstance()
 {
-	timeout(100, SERVER_TIMEOUT_SELECTOR(CMasterServer::tick));
+	//timeout(100, SERVER_TIMEOUT_SELECTOR(CMasterServer::tick));
 	m_pWatchDog = new CWatchDog(6000);
 }
 
@@ -41,3 +41,5 @@ void CMasterServer::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HAND
 {
 
 }
+
+

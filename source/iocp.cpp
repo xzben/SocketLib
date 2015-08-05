@@ -133,7 +133,7 @@ int32_t IOCPDriver::poll_event_process(IOEvent *events, int32_t max, int waittim
 			}
 			//////////////////////////////////////////////////////////////////////////
 			//不正常的error
-			LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus 失败 >> error [%d] ", dwErrorCode);
+			LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus 失败 >> error [%d] socket[%d] ", dwErrorCode, sock);
 			if (ERROR_OPERATION_ABORTED == dwErrorCode) //Accept用于接收新连接的socket关闭
 			{
 				LOG_FATAL("IOCPDriver >> GetQueuedCompletionStatus >> Accept用于接收新连接的socket关闭");
@@ -386,4 +386,5 @@ int32_t		IOCPDriver::accept(SOCKET_HANDLE sock)
 
 	return 0;
 }
+
 #endif // (CUR_PLATFROM == PLATFORM_WIN32)
