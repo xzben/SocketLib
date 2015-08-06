@@ -88,7 +88,7 @@ int32_t	CServer::dispatchTasks(int num)
 		queue.pop();
 		workNum++;
 		//////////////////////////////////////////////////////////////////////////
-		//Ö´ĞĞÈÎÎñ
+		//æ‰§è¡Œä»»åŠ¡
 		if ( !doSessionCall(pTask->m_session, pTask->m_source, pTask->m_data) )
 			this->excuteOneTask(pTask->m_type, pTask->m_session, pTask->m_source, pTask->m_data);
 		//////////////////////////////////////////////////////////////////////////
