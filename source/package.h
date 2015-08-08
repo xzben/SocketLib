@@ -9,7 +9,7 @@ class Package
 {
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	friend class IOCPDriver;
-#elif
+#else
 	friend class EpollDriver;
 #endif
 	friend class CWatchDog;

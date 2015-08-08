@@ -84,9 +84,9 @@ bool	Socket::close()
   		return true;
 
 	bool bRet = false;
-#if	defined(_WIN32)
+#if (CUR_PLATFROM == PLATFORM_WIN32)
 	bRet = (0 == ::closesocket(m_hSocket));
-#elif defined(_LINUX)
+#else
 	bRet = (0 == ::close(m_hSocket));
 #endif//_WIN32
 	m_hSocket = INVALID_SOCKET_HANDLE;
@@ -165,18 +165,18 @@ bool	Socket::connect(const InterAddress& addrCon, const TimeValue& tmVal)
 	if (nRet < 0) 
 	{
 		int32_t error = ::GetLastError();
-#ifdef _WIN32
+#if (CUR_PLATFROM == PLATFORM_WIN32)
 		if ( WSAEWOULDBLOCK == error)
-#elif  _LINUX
+#else
 		if (EINPROGRESS == error)
 #endif
 		{
 			fd_set wset;
 			FD_ZERO(&wset);
 			FD_SET(m_hSocket, &wset);
-#if defined(_WIN32)
+#if (CUR_PLATFROM == PLATFORM_WIN32)
 			int32_t nWidth = 0;
-#elif defined(_LINUX)
+#else
 			int32_t nWidth = m_hSocket + 1;
 #endif
 			if (::select(nWidth, NULL, &wset, NULL, tmVal.getTimeval()) > 0 && FD_ISSET(m_hSocket, &wset))
@@ -227,9 +227,9 @@ int32_t	Socket::getReadyStatus(const TimeValue& tmVal, bool *pReadReady /*= null
 	SET_PTR_VALUE_SAFE(pWriteReady, false);
 	SET_PTR_VALUE_SAFE(pExceptReady, false);
 
-#if defined( _WIN32 )
+#if (CUR_PLATFROM == PLATFORM_WIN32)
 	int32_t selectWith = 0;
-#elif defined( _LINUX )
+#else
 	int32_t selectWith = m_hSocket + 1;
 #endif
 
@@ -366,7 +366,7 @@ bool Socket::setBlocked(bool bIsBlock)
 	if (flag = fcntl(hSock, F_GETFL, 0) < 0)
 		return false;
 
-	SET_DEL_BIT(flag, O_NONBLOCK, !bBlock);
+	SET_DEL_BIT(flag, O_NONBLOCK, !bIsBlock);
 
 	if (fcntl(hSock, F_SETFL, flag) < 0)
 		return false;
@@ -384,7 +384,7 @@ bool Socket::isBlocked()
 #elif (CUR_PLATFROM == PLATFROM_LINUX)
 
 	int32_t flag;
-	if (flag = fcntl(hSock, F_GETFL, 0) < 0)
+	if (flag = fcntl(m_hSocket, F_GETFL, 0) < 0)
 		return false;
 
 	return QUERY_IS_SET_BIT(flag, O_NONBLOCK);

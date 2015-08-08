@@ -19,7 +19,6 @@ public:
 	void start();
 	bool addTask(SERVER_HANDLE server_handle, CTask* pTask);
 	void addServer(CServer *&pServer);
-
 protected:
 	void run(uint32_t id);
 	class WorkThread : public CThread
@@ -70,7 +69,6 @@ void WorkThreadPool::run(uint32_t id)
 	WorkThreadPool::QueueContainer container;
 	const uint32_t EXCUTE_TASK_NUM_PER_SERVER = 10;
 	const uint32_t EXCUTE_SERVER_NUM = 1;
-
 	while (!CGlobalController::getInstance()->isSystemStop())
 	{
 		m_signalNewTask.wait();

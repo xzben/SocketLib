@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////
 	typedef SOCKET					SOCKET_HANDLE;
 	#define	INVALID_SOCKET_HANDLE			INVALID_SOCKET
-#elif (CUR_PLATFROM ==PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFROM_LINUX)
 	#include <sys/socket.h>
 	#include <sys/types.h>
 	#include <sys/select.h>
@@ -33,6 +33,7 @@
 	#include <netinet/in.h>
 	#include <unistd.h>
 	#include <errno.h>
+	#include <fcntl.h>
 ////////////////////////////////////////////////////////////
 //	统一 socket shutdown 的参数
 	#define	SD_RECEIVE				SHUT_RD					
@@ -40,7 +41,8 @@
 	#define	SD_BOTH					SHUT_RDWR	
 ////////////////////////////////////////////////////////////
 	typedef int32_t					SOCKET_HANDLE;
-	#define	INVALID_SOCKET_HANDLE			-1
+	#define	INVALID_SOCKET_HANDLE		-1
+	#define INVALID_SOCKET				-1
 	#define	SOCKET_ERROR				-1
 	extern int32_t 	GetLastError();
 #endif//平台相关

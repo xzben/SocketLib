@@ -2,15 +2,16 @@
 #include "common.h"
 
 #if (CUR_PLATFROM == PLATFORM_WIN32) 
-#define _WIN32_WINNT 0x0501
-#include<windows.h>
+	#define _WIN32_WINNT 0x0501
+	#include<windows.h>
 #else
-#include <stdio.h>
-#include <stdlib.h>
-#include <ucontext.h>
-#include <stddef.h>
-#include <string.h>
-#include <stdint.h>
+	#include <sys/time.h>
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <ucontext.h>
+	#include <stddef.h>
+	#include <string.h>
+	#include <stdint.h>
 #endif
 
 #define STACK_SIZE (64<<10)
@@ -192,7 +193,8 @@ cort_t	CoSchedulerImplement::_newCoroutine(coroutine_func func, void* context)
 	co->uctx.uc_link = &m_main->uctx;
 
 	uintptr_t ptr = (uintptr_t)co;
-	makecontext(&co->uctx, (void(*)(void))_proxyfunc, 2, (uint32_t)ptr, (uint32_t)(ptr >> 32));
+	void(*pf)(uint32_t, uint32_t) = _proxyfunc;
+	::makecontext(&co->uctx, (void(*)(void))pf, 2, (uint32_t)ptr, (uint32_t)(ptr >> 32));
 #endif
 	return co;
 }

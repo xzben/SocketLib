@@ -36,6 +36,9 @@
 	# define EXPORT_C_DLL											
 	# define IMPORT_C_DLL											
 	# define CALLBACK
+	# define WINAPI
+	# define  _snprintf(buf, sz, fmt, ...) 							sprintf(buf, fmt, __VA_ARGS__)		
+	# define strcpy_s(dest, sz, sc)									strcpy(dest, sc)
 #endif
 
 #if defined(SOCKETLIB_BUILD)

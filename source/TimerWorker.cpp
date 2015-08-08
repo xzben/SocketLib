@@ -361,7 +361,12 @@ void CTimerWorker::run()
 //获得当前系统时间
 int32_t CTimerWorker::getTimeOfDay(struct timeval *tp, void *tzp)
 {
-	return ::gettimeofday(tp, tzp);
+#if (CUR_PLATFROM == PLATFORM_WIN32)
+	void *pTimeZone = tzp;
+#else
+	struct timezone* pTimeZone = (struct timezone*)tzp;
+#endif
+	return ::gettimeofday(tp, pTimeZone);
 }
 
 // 定时器内部更新，此接口应该由一个放在一个线程中不断的去更新执行
@@ -372,7 +377,7 @@ int32_t	CTimerWorker::updateTimer()
 
 	if (systime < cp)// 出错.....
 	{
-		LOG_WARN("error timer assert(systime < cp) is failed!!");
+		LOG_WARN("%s","error timer assert(systime < cp) is failed!!");
 	}
 	else if (systime != cp)
 	{

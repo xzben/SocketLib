@@ -62,7 +62,7 @@ void CLogServer::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE 
 				fclose(m_fp_file);
 			}
 			m_day = now.tm_mday;
-			char   szName[_MAX_PATH];
+			char   szName[_MAX_PATH];			
 			_snprintf(szName, sizeof(szName), "%s[%04d%02d%02d].log", m_file.c_str(), now.tm_year + 1900, now.tm_mon + 1, now.tm_mday);
 			m_fp_file = fopen(szName, "at");
 		}

@@ -1,12 +1,11 @@
 #ifndef __2014_01_04_EPOLL_H__
 #define __2014_01_04_EPOLL_H__
 
-#include "common.h"
-
-#if (CUR_PLATFROM == PLATFROM_LINUX)
 #include "IODriver.h"
-class EpollEventDataManager;
 
+#if(CUR_PLATFROM == PLATFROM_LINUX)
+
+class EpollEventDataManager;
 class EpollDriver : public IODriver
 {
 public:

@@ -47,7 +47,12 @@
 typedef uint32_t	SERVER_HANDLE; //服务标示句柄
 typedef uint32_t	SESSION_ID; //每个服务的一个操作标示ID
 
-typedef int32_t		socklen_t;
+#if (CUR_PLATFROM == PLATFORM_WIN32)
+	typedef int32_t			socklen_t;
+#else
+	typedef unsigned long 	DWORD;
+	#define _MAX_PATH		255
+#endif
 
 enum : SERVER_HANDLE
 {

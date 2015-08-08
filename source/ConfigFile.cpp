@@ -1,5 +1,6 @@
 #include "ConfigFile.h"
 #include <cstdio>
+#include <cstring>
 
 #define MAX_LINE_LEN	4096
 
@@ -230,7 +231,7 @@ void CConfigFile::dumpConfigs()
 	}
 }
 
-int	 CConfigFile::getInt(const char *key, int default)
+int	 CConfigFile::getInt(const char *key, int def)
 {
 	auto it = m_values.find(key);
 	if (it != m_values.end())
@@ -238,10 +239,10 @@ int	 CConfigFile::getInt(const char *key, int default)
 		return atoi(it->second.c_str());
 	}
 
-	return default;
+	return def;
 }
 
-double	CConfigFile::getDouble(const char *key, double default)
+double	CConfigFile::getDouble(const char *key, double def)
 {
 	auto it = m_values.find(key);
 	if (it != m_values.end())
@@ -249,9 +250,9 @@ double	CConfigFile::getDouble(const char *key, double default)
 		return atof(it->second.c_str());
 	}
 
-	return default;
+	return def;
 }
-std::string  CConfigFile::getString(const char* key, std::string default)
+std::string  CConfigFile::getString(const char* key, std::string def)
 {
 	auto it = m_values.find(key);
 	if (it != m_values.end())
@@ -259,5 +260,5 @@ std::string  CConfigFile::getString(const char* key, std::string default)
 		return it->second;
 	}
 
-	return default;
+	return def;
 }

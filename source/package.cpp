@@ -1,4 +1,5 @@
 #include "package.h"
+#include <cstring>
 
 Package::Package()
 : m_head(0)
@@ -26,7 +27,9 @@ Package::Package(const PackageSize bufSize, void *buf)
 
 Package::~Package()
 {
-	SAFE_DELETE(m_buffer);
+	char* tmp = (char*)m_buffer;
+	SAFE_DELETE(tmp);
+	m_buffer = nullptr;
 }
 
 bool Package::isFillComplete()

@@ -110,7 +110,7 @@ SOCKET_HANDLE CSocketDriver::getListenSocket(SERVER_HANDLE handle)
 
 	m_lockListenServers.lock();
 	auto it = m_listenServers2Sock.find(handle);
-	if (it != m_listenSock2Servers.end())
+	if (it != m_listenServers2Sock.end())
 	{
 		ret = it->second;
 	}

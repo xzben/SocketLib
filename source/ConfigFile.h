@@ -19,9 +19,9 @@ public:
 
 	bool init(const char* file);
 	void			dumpConfigs();
-	int				getInt(const char *key, int default);
-	double			getDouble(const char *key, double default);
-	std::string		getString(const char* key, std::string default);
+	int				getInt(const char *key, int def);
+	double			getDouble(const char *key, double def);
+	std::string		getString(const char* key, std::string def);
 protected:
 	int	 checkValue(char *line);
 	bool checkKeyValid(char* key);

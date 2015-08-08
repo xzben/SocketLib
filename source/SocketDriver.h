@@ -7,12 +7,6 @@
 #ifndef __2015_03_29_SOCKET_DRIVER_H__
 #define __2015_03_29_SOCKET_DRIVER_H__
 
-#if (CUR_PLATFROM == PLATFORM_WIN32)
-	#include "iocp.h"
-#elif
-	
-#endif
-
 #include "SingleInstance.h"
 #include "Thread.h"
 #include "package.h"
@@ -20,15 +14,23 @@
 #include <unordered_map>
 #include <set>
 
+#if (CUR_PLATFROM == PLATFORM_WIN32)
+	#include "iocp.h"
+#else
+	#include "epoll.h"
+#endif
+
+
 class CSocketDriver : public CThread, public SingleInstance<CSocketDriver>
 {
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	typedef IOCPDriver  ImpDirver;
-#elif
+	friend class IOCPDriver;
+#else
 	typedef EpollDriver ImpDirver;
+	friend class EpollDriver;
 #endif
 	friend class CWatchDog;
-	friend class ImpDirver;
 public:
 	SOCKET_HANDLE	 listen(SERVER_HANDLE server, const short port, const char* ip = nullptr, int backlog = 10);
 	int32_t	 connect(const short port, const char* ip);

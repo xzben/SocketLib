@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #if (CUR_PLATFROM == PLATFROM_LINUX)
-
+///////////////////////////////////////////////////////
 struct EpollData
 {
 public:
@@ -23,12 +23,12 @@ public:
 	}
 
 	SOCKET_HANDLE sock;
-	SocketIOType  type;
-	UINT		  events;
+	uint32_t  	  type; //SocketIOType
+	uint32_t	  events;
 	Package*	  package; //recv
 	Package*	  sendPackage; //send
 };
-
+////////////////////////////////////////////////////
 class EpollEventDataManager
 {
 public:
@@ -42,7 +42,26 @@ private:
 	typedef std::unordered_map<SOCKET_HANDLE, EpollData*>  Sock2EpollData;
 	Sock2EpollData	m_sockDatas;
 };
+EpollEventDataManager::EpollEventDataManager()
+{
 
+}
+
+EpollEventDataManager::~EpollEventDataManager()
+{
+
+}
+
+EpollData* EpollEventDataManager::getEpollData(SOCKET_HANDLE sock)
+{
+	return EpollData::create();
+}
+
+void EpollEventDataManager::freeEpollData(SOCKET_HANDLE sock)
+{
+
+}
+//////////////////////////////////////////////////////////////////////
 EpollDriver::EpollDriver()
 {
 	m_epollHandle = epoll_create(1024);
@@ -51,22 +70,22 @@ EpollDriver::EpollDriver()
 
 EpollDriver::~EpollDriver()
 {
-	close(efd);
+	close(m_epollHandle);
 }
 
 int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int waittime /*=-1*/)
 {
 	struct epoll_event events[max];
-	LOG_INFO("May the source be with you!!");
+	LOG_INFO("%s","May the source be with you!!");
 
 	int fds = epoll_wait(m_epollHandle, events, max, waittime);
 	if (fds == 0)
 	{
-		LOG_INFO("event loop timed out");
+		LOG_INFO("%s","event loop timed out");
 		return 0;
 	}
 
-	for (int i = 0;; i < fds; i++)
+	for (int i = 0; i < fds; i++)
 	{
 		EpollData* data = (EpollData*)events[i].data.ptr;
 		IOEvent ioEvent;
@@ -152,7 +171,7 @@ int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int wait
 						{
 							Package::free(package);
 							data->sendPackage = nullptr;
-							data->events &= 
+							//data->events &= 
 							struct epoll_event ev;
 							ev.events &= ~EPOLLOUT;
 							ev.data.ptr = data;
@@ -265,7 +284,7 @@ int32_t EpollDriver::poll_recv(SOCKET_HANDLE sock)
 	data->events |= EPOLLIN;
 	data->type |= IO_Read;
 	data->sock = sock;
-	data->package  = CSocketDriver::getInstance()->getSocketPackage(evtSock);
+	data->package  = CSocketDriver::getInstance()->getSocketPackage(sock);
 
 	return 0;
 }

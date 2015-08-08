@@ -1,6 +1,39 @@
 #include "Task.h"
 #include "config.h"
 
+/////////////////////////////////////////////////////////////////////////
+//CData
+//禁用char* 类型
+template<>
+char* CData::pop<char*, 0>(char*)
+{
+	return nullptr;
+}
+
+template<>
+const char* CData::pop<const char*, 0>(const char *)
+{
+	return nullptr;
+}
+	
+
+template<>
+void CData::push<char*>(char* str)
+{
+	m_datas.push_back(new DataBlock<std::string>(str));
+	//this->push(new DataBlock<std::string>(str));
+}
+
+template<>
+void CData::push<const char*>(const char* str)
+{
+	m_datas.push_back(new DataBlock<std::string>(str));
+	//this->push(new DataBlock<std::string>(str));
+}
+
+
+////////////////////////////////////////////////////////////////
+// CTask
 CTask* CTask::create(TaskType type, SESSION_ID session_id, SERVER_HANDLE source, CData *data)
 {
 	CTask *pRet = new CTask;

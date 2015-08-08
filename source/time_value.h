@@ -11,6 +11,7 @@
 
 #include <cstdint>
 #include <time.h>
+#include "common.h"
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	#include <winsock2.h>
 #elif (CUR_PLATFROM == PLATFROM_LINUX)

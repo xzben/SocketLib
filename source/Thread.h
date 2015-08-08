@@ -23,7 +23,7 @@ public:
 	bool isStart(){ return m_bIsStart; }
 private:
 	friend void		ThreadFunc(void* param);
-	std::thread		*m_pCore;
+	//std::thread		*m_pCore;
 	bool			m_bIsFinish;
 	bool			m_bIsStart;
 

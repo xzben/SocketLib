@@ -65,20 +65,6 @@ public:
 		m_datas.push_back(new DataBlock<Type>(data));
 	}
 
-	template<>
-	void push<char*>(char* str)
-	{
-		m_datas.push_back(new DataBlock<std::string>(str));
-		//this->push(new DataBlock<std::string>(str));
-	}
-
-	template<>
-	void push<const char*>(const char* str)
-	{
-		m_datas.push_back(new DataBlock<std::string>(str));
-		//this->push(new DataBlock<std::string>(str));
-	}
-
 	template<typename Type, int index>
 	Type	pop(Type defValue)
 	{
@@ -96,7 +82,7 @@ public:
 		}
 		else
 		{
-			socketlib_error("try to pop an empty CData!!: %s", __FUNCDNAME__);
+			socketlib_error("try to pop an empty CData!!: %s", __func__);
 		}
 		return ret;
 	}
@@ -112,16 +98,8 @@ private:
 		}
 		m_datas.clear();
 	}
-	//Ω˚”√char* ¿‡–Õ
-	template<>
-	char* pop<char*, 0>(char*);
-
-	template<>
-	const char* pop<const char*, 0>(const char *);
-	
 	std::vector<DataBlockBase*>	m_datas;
 };
-
 class CTask
 {
 public:
