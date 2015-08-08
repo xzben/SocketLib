@@ -7,7 +7,7 @@
 #ifndef __2015_03_29_TASK_H__
 #define __2015_03_29_TASK_H__
 
-#include "common.h"
+#include "GlobalController.h"
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -82,7 +82,7 @@ public:
 		}
 		else
 		{
-			socketlib_error("try to pop an empty CData!!: %s", __func__);
+			LOG_ERROR("try to pop an empty CData!!");
 		}
 		return ret;
 	}

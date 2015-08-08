@@ -12,18 +12,6 @@
 #include "common.h"
 #include "Task.h"
 
-class CSession;
-typedef void (CALLBACK CSession::*SERVER_TIMEOUT_CALLBACK)(CData *pData);
-typedef void (CALLBACK *NORMAL_TIMEOUT_CALLBACK)(CData *pData);
-typedef void (CALLBACK CSession::*SERVER_RESPOND)(SESSION_ID session_id, SERVER_HANDLE source, CData *pData);
-typedef void (CALLBACK *NORMAL_RESPOND)(SESSION_ID session_id, SERVER_HANDLE source, CData *pData);
-
-#define SERVER_TIMEOUT_SELECTOR( selector )		static_cast<SERVER_TIMEOUT_CALLBACK>(&selector)
-#define NORMAL_TIMEOUT_SELECTOR( selector )		(selector)
-#define SERVER_RESPOND_SELECTOR( selector )		static_cast<SERVER_RESPOND>(&selector)
-#define NORMAL_RESPOND_SELECTOR( selector )		(selector)
-
-
 class CSession
 {
 	enum RCALL_TYPE: uint8_t

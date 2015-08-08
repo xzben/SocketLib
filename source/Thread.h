@@ -8,7 +8,7 @@
 #define __2015_03_29_THREAD_H__
 
 #include "config.h"
-#include <thread>
+#include <cstdint>
 
 class CThread
 {
@@ -23,7 +23,6 @@ public:
 	bool isStart(){ return m_bIsStart; }
 private:
 	friend void		ThreadFunc(void* param);
-	//std::thread		*m_pCore;
 	bool			m_bIsFinish;
 	bool			m_bIsStart;
 

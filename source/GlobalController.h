@@ -9,31 +9,21 @@
 #define __2015_04_09_GLOBAL_CONTROLLER_H__
 
 #include "SingleInstance.h"
-#include "Condition.h"
 #include "common.h"
-#include "LogServer.h"
 #include "ConfigFile.h"
 #include <map>
 
-#if (CUR_PLATFROM == PLATFORM_WIN32)
-#define __FUNCTION_NAME__	__FUNCTION__
-#elif (CUR_PLATFROM == PLATFROM_LINUX )
-	#define __FUNCTION_NAME__	__func__
-#endif
-
 #define LOG_DETAIL( func ) \
-	;//func(GLOBAL_LOG_HANDLE, "[ %s | %d ] >> %s", __FILE__, __LINE__, __FUNCTION_NAME__);
+	func(GLOBAL_LOG_HANDLE, "[ %s | %d ] >> %s", __FILE__, __LINE__, __FUNCTION_NAME__);
 
 // 全局日志宏
 #define LOG_DEBUG(pattern, ...)	\
 	{ \
-	LOG_DETAIL(CGlobalController::getInstance()->debug); \
 	CGlobalController::getInstance()->debug(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
 	}
 
 #define LOG_INFO(pattern, ...)  \
 	{\
-	LOG_DETAIL(CGlobalController::getInstance()->info); \
 	CGlobalController::getInstance()->info(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
 	}
 
@@ -55,14 +45,17 @@
 	CGlobalController::getInstance()->fatal(GLOBAL_LOG_HANDLE, (pattern), __VA_ARGS__); \
 	}
 
+
+class CLogServer;
+
 class CGlobalController : public SingleInstance<CGlobalController>
 {
 	friend class ThreadGuard;
 	friend class SingleInstance<CGlobalController>;
 public:
 	void			init();
-	CConfigFile*	getConfig() { return m_config; }
-	bool			isSystemStop(){ return m_bIsSystemStop; }
+	CConfigFile*	getConfig();
+	bool			isSystemStop();
 	void			stopSystem();
 	void			waitSystemStop();
 	

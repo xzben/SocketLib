@@ -42,8 +42,6 @@
 #define	SAFE_DELETE(__ptr)					if( nullptr != (__ptr) ) { delete __ptr; __ptr = nullptr; }
 #define SAFE_DELETE_ARR(__ptr)				if( nullptr != (__ptr) ) { delete[] __ptr; __ptr = nullptr; }
 
-#define socketlib_error( fmt, ... )			printf(fmt, ##__VA_ARGS__)
-
 typedef uint32_t	SERVER_HANDLE; //服务标示句柄
 typedef uint32_t	SESSION_ID; //每个服务的一个操作标示ID
 
@@ -53,6 +51,18 @@ typedef uint32_t	SESSION_ID; //每个服务的一个操作标示ID
 	typedef unsigned long 	DWORD;
 	#define _MAX_PATH		255
 #endif
+
+class CSession;
+class CData;
+typedef void (CALLBACK CSession::*SERVER_TIMEOUT_CALLBACK)(CData *pData);
+typedef void (CALLBACK *NORMAL_TIMEOUT_CALLBACK)(CData *pData);
+typedef void (CALLBACK CSession::*SERVER_RESPOND)(SESSION_ID session_id, SERVER_HANDLE source, CData *pData);
+typedef void (CALLBACK *NORMAL_RESPOND)(SESSION_ID session_id, SERVER_HANDLE source, CData *pData);
+
+#define SERVER_TIMEOUT_SELECTOR( selector )		static_cast<SERVER_TIMEOUT_CALLBACK>(&selector)
+#define NORMAL_TIMEOUT_SELECTOR( selector )		(selector)
+#define SERVER_RESPOND_SELECTOR( selector )		static_cast<SERVER_RESPOND>(&selector)
+#define NORMAL_RESPOND_SELECTOR( selector )		(selector)
 
 enum : SERVER_HANDLE
 {

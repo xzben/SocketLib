@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	CTimerWorker::getInstance();
 
 	CWorkerPool::getInstance()->start();
-	//CSocketDriver::getInstance()->start();
+	CSocketDriver::getInstance()->start();
 	CTimerWorker::getInstance()->start();
 	
 	CMasterServer::getInstance();

@@ -1,9 +1,12 @@
 #include "GlobalController.h"
+#include "LogServer.h"
 #include "WorkerPool.h"
 #include "ServerManager.h"
 #include "TimerWorker.h"
 #include "SocketDriver.h"
 #include "Atom.h"
+#include "ConfigFile.h"
+
 #include <cstdarg>
 #include <iostream>
 #include <thread>
@@ -25,6 +28,16 @@ CGlobalController::~CGlobalController()
 void CGlobalController::init()
 {
 	m_logServer = new CLogServer;
+}
+
+CConfigFile* CGlobalController::getConfig()
+{
+	return m_config;
+}
+
+bool CGlobalController::isSystemStop()
+{
+	return m_bIsSystemStop;
 }
 
 void CGlobalController::stopSystem()
@@ -97,7 +110,7 @@ void CGlobalController::logva(SERVER_HANDLE source, const LOG_LEVEL level, const
 	char buffer[8192];
 	int len = vsprintf(buffer, pattern, vp);
 	CData *pData = new CData;
-	pData->push<char*>(buffer);
+	pData->push<std::string>(std::string(buffer));
 	m_logServer->addTask( CTask::create(TaskType::SYS_LOG, 0, source, pData) );
 
 	pData->release();

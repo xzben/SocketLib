@@ -30,6 +30,7 @@
 	# define EXPORT_C_DLL											extern "C" __declspec(dllexport)
 	# define IMPORT_C_DLL											extern "C" __declspec(dllimport)
 	# define CALLBACK												__stdcall
+# define __FUNCTION_NAME__											__FUNCDNAME__
 #else
 	# define EXPORT_DLL												
 	# define IMPORT_DLL												
@@ -39,6 +40,7 @@
 	# define WINAPI
 	# define  _snprintf(buf, sz, fmt, ...) 							sprintf(buf, fmt, __VA_ARGS__)		
 	# define strcpy_s(dest, sz, sc)									strcpy(dest, sc)
+	# define __FUNCTION_NAME__										__func__
 #endif
 
 #if defined(SOCKETLIB_BUILD)
