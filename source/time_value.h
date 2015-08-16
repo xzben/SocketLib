@@ -14,7 +14,7 @@
 #include "common.h"
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	#include <winsock2.h>
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 	#include<sys/time.h>
 #endif//_WIN32
 
@@ -42,7 +42,7 @@ public:
 
 #if	 (CUR_PLATFROM == PLATFORM_WIN32)
 	struct timeval const* getTimeval() const { return &m_tmVal; }
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 	struct timeval* getTimeval() const;
 #endif
 // 	operator struct timeval const  () const;

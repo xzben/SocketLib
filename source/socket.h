@@ -74,6 +74,7 @@ protected:
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 public:
 	bool			updateAcceptContext();
+	bool			updateConnectContext();
 protected:
 	// 由于window下未找到合适的判断套接字是否阻塞的方式，目前先用这个标记来自行实现一下
 	// window 下默认为阻塞套接字

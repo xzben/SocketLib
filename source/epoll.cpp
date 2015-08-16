@@ -2,10 +2,13 @@
 #include "GlobalController.h"
 #include "SocketDriver.h"
 #include "socket.h"
+#include "RWLock.h"
 #include <unordered_map>
+#include <queue>
 
-#if (CUR_PLATFROM == PLATFROM_LINUX)
+#if (CUR_PLATFROM == PLATFORM_UNKNOW)
 ///////////////////////////////////////////////////////
+
 struct EpollData
 {
 public:
@@ -14,19 +17,32 @@ public:
 		return new EpollData;
 	}
 
+	static void free(EpollData* obj)
+	{
+		delete obj;
+	}
+
 	EpollData()
 	{
 		sock = INVALID_SOCKET;
 		type = IO_UNKNOW;
-		package = nullptr;
-		sendPackage = nullptr;
+		recvPackage = nullptr;
 	}
 
+	~EpollData()
+	{
+		Package::free(recvPackage);
+		while (!sendPackages.empty())
+		{
+			Package::free(sendPackages.pop());
+		}
+	}
 	SOCKET_HANDLE sock;
-	uint32_t  	  type; //SocketIOType
+	SocketIOType  type; //SocketIOType
 	uint32_t	  events;
-	Package*	  package; //recv
-	Package*	  sendPackage; //send
+	Package*	  recvPackage; //recv
+	std::queue<Package*> sendPackages;
+	RWLcok		  lock;
 };
 ////////////////////////////////////////////////////
 class EpollEventDataManager
@@ -41,7 +57,10 @@ public:
 private:
 	typedef std::unordered_map<SOCKET_HANDLE, EpollData*>  Sock2EpollData;
 	Sock2EpollData	m_sockDatas;
+	std::mutex      m_lock;
+
 };
+
 EpollEventDataManager::EpollEventDataManager()
 {
 
@@ -49,18 +68,44 @@ EpollEventDataManager::EpollEventDataManager()
 
 EpollEventDataManager::~EpollEventDataManager()
 {
-
+	for (auto it = m_sockDatas.begin(); it != m_sockDatas.end(); it++)
+	{
+		EpollData::free(it->second);
+	}
+	m_sockDatas.clear();
 }
 
 EpollData* EpollEventDataManager::getEpollData(SOCKET_HANDLE sock)
 {
-	return EpollData::create();
+	EpollData* ret = nullptr;
+
+	m_lock.lock();
+	auto it = m_sockDatas.find(sock);
+	if (it == m_sockDatas.end())
+	{
+		ret = EpollData::create();
+	}
+	else
+	{
+		ret = it->second;
+	}
+	m_lock.unlock();
+
+	return ret;
 }
 
 void EpollEventDataManager::freeEpollData(SOCKET_HANDLE sock)
 {
-
+	m_lock.lock();
+	auto it = m_sockDatas.find(sock);
+	if (it != m_sockDatas.end())
+	{
+		EpollData::free(it*);
+		m_sockDatas.erase(it);
+	}
+	m_lock.unlock();
 }
+
 //////////////////////////////////////////////////////////////////////
 EpollDriver::EpollDriver()
 {
@@ -71,34 +116,40 @@ EpollDriver::EpollDriver()
 EpollDriver::~EpollDriver()
 {
 	close(m_epollHandle);
+	SAFE_DELETE(m_pEvtDataManager);
 }
 
-int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int waittime /*=-1*/)
+int32_t EpollDriver::poll_event_process(IOEvent *events, int32_t max, int waittime /*=-1*/)
 {
-	struct epoll_event events[max];
-	LOG_INFO("%s","May the source be with you!!");
+	struct epoll_event poll_events[max];
 
-	int fds = epoll_wait(m_epollHandle, events, max, waittime);
+	int fds = epoll_wait(m_epollHandle, poll_events, max, waittime);
 	if (fds == 0)
 	{
 		LOG_INFO("%s","event loop timed out");
 		return 0;
 	}
 
+	int indx = 0;
 	for (int i = 0; i < fds; i++)
 	{
-		EpollData* data = (EpollData*)events[i].data.ptr;
+		EpollData* data = (EpollData*)poll_events[i].data.ptr;
+
 		IOEvent ioEvent;
+		data->lock.rLock();
 		SOCKET_HANDLE evtSock = data->sock;
-		ioEvent.evt_sock = data->sock;
-		
+		SocketIOType  curType = data->type;
+		data->lock.rUnlock();
+		uint32_t	  curEvent = poll_events[i].events;
+		ioEvent.evt_sock = evtSock;
+
 		if (data)
 		{
 			LOG_INFO("started processing for event id(%d) and sock(%d)", i, evtSock);
 			// when data avaliable for read or urgent flag is set
-			if ((events[i].events & EPOLLIN) || (events[i].events & EPOLLPRI))
+			if ((curEvent & EPOLLIN) || (curEvent & EPOLLPRI))
 			{
-				if (events[i].events & EPOLLIN)
+				if (curEvent & EPOLLIN)
 				{
 					LOG_INFO("found EPOLLIN for event id(%d) and sock(%d)", i, evtSock);
 					//value->cur_event &= EPOLLIN;
@@ -110,7 +161,7 @@ int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int wait
 				}
 				/// connect or accept callbacks also go through EPOLLIN
 				/// accept callback if flag set
-				if(data->type & IO_Accept)
+				if(curType & IO_Accept)
 				{
 					Socket ListenSocket;
 					ListenSocket.attach(evtSock);
@@ -121,75 +172,91 @@ int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int wait
 					ioEvent.evt_type = IO_Accept;
 				}
 
-				if(data->type & IO_Read)
+				if(curType & IO_Read)
 				{
 					Socket recvSocket;
 					recvSocket.attach(evtSock);
+
+					data->lock.rLock();
 					Package *package = data->package;
-					void *pDataBuffer = nullptr;
-					PackageSize nDataSize = 0;
-					package->getFillData(nDataSize, pDataBuffer);
-					PackageSize readSize = recvSocket.recv(pDataBuffer, nDataSize);
+					data->lock.rUnlock();
+
+					if (package == nullptr)
+						package = CSocketDriver::getInstance()->getSocketPackage(evtSock);
+
+					PackageSize readSize = 0;
+					if (package != nullptr)
+					{
+						void *pDataBuffer = nullptr;
+						PackageSize nDataSize = 0;
+						package->getFillData(nDataSize, pDataBuffer);
+						readSize = recvSocket.recv(pDataBuffer, nDataSize);
+					}
+					
 					if (readSize > 0)
 					{
 						package->FillData(readSize);
-						ioEvent.evt_type = IO_Read;
+						ioEvent.evt_type = IO_ReadPart;
 
 						if (package->isFillComplete())
 						{
-							CSocketDriver::getInstance()->resetSocketPackage(evtSock);
+							ioEvent.evt_type = IO_Read;
+							ioEvent.package = package;
+							package = CSocketDriver::getInstance()->resetSocketPackage(evtSock);
 						}
-						poll_recv(evtSock);
-						ioEvent.package = package;
-					}
-					else
-					{
-						LOG_ERROR("EpollDriver recv data failed event id(%d) and sock(%d)", i, evtSock);
-						ioEvent.evt_type = IO_Close;
+						recv(evtSock, package);	
 					}
 				}
 			}
-			else if (events[i].events & EPOLLOUT)
+			else if (curEvent & EPOLLOUT)
 			{
 				LOG_INFO("found EPOLLOUT for event id(%d) and sock(%d)", i, evtSock);
-
-				if (data->type & IO_Write)
+				if (curType & IO_Write)
 				{
-					Package *package = data->sendPackage;
-					void *pDataBuffer = nullptr;
-					PackageSize nDataSize = 0;
-					package->getSendData(nDataSize, pDataBuffer);
+					Package *package = nullptr;
+					
+					data->lock.rLock();
+					if (!data->sendPackages.empty())
+						package = data->sendPackages.front();
+					data->lock.rUnlock();
+					
+					PackageSize sendSize = 0;
+					if (package != nullptr)
+					{	
+						void *pDataBuffer = nullptr;
+						PackageSize nDataSize = 0;
+						package->getSendData(nDataSize, pDataBuffer);
 
-					Socket sendSocket;
-					sendSocket.attach(evtSock);
-					PackageSize sendSize = sendSocket.send(pDataBuffer, nDataSize);
+						Socket sendSocket;
+						sendSocket.attach(evtSock);
+						sendSize = sendSocket.send(pDataBuffer, nDataSize);
+					}
+
 					if (sendSize > 0)
 					{
 						package->offsetData(sendSize);
 						ioEvent.evt_type = IO_Write;
 						if (package->isSendComplete())
 						{
+							data->lock.wLock();
+							data->sendPackages.pop();
+							bool isEmpty = data->sendPackages.empty();
+							data->lock.wUnlock;
+
+							if (isEmpty)
+							{
+								clearEvent(event, EPOLLOUT, IO_Write);
+							}
+
 							Package::free(package);
-							data->sendPackage = nullptr;
-							//data->events &= 
-							struct epoll_event ev;
-							ev.events &= ~EPOLLOUT;
-							ev.data.ptr = data;
-							epoll_ctl(m_epollHandle, EPOLL_CTL_MOD, evtSock, &ev);
 						}
-					}
-					else
-					{
-						LOG_ERROR("EpollDriver send data failed event id(%d) and sock(%d)", i, evtSock);
-						ioEvent.evt_type = IO_Close;
-						Package::free(package);
 					}
 				}
 			}
 			// shutdown or error
-			else if ((events[i].events & EPOLLRDHUP) || (events[i].events & EPOLLERR) || (events[i].events & EPOLLHUP))
+			else if ((curEvent & EPOLLRDHUP) || (curEvent & EPOLLERR) || (curEvent & EPOLLHUP))
 			{
-				if (events[i].events & EPOLLRDHUP)
+				if (curEvent & EPOLLRDHUP)
 				{
 					LOG_INFO("found EPOLLRDHUP for event id(%d) and sock(%d)", i, evtSock);
 					//value->cur_event &= EPOLLRDHUP;
@@ -204,9 +271,10 @@ int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int wait
 		}
 		else // not in table
 		{
-			ioEvent.evt_type = IO_Close;
+			ioEvent.evt_type = IO_Error;
 		}
-		ioEvents[i] = ioEvent;
+		events[indx] = ioEvent;
+		indx++;
 	}
 
 	return fds;
@@ -215,19 +283,27 @@ int32_t EpollDriver::poll_event_process(IOEvent *ioEvents, int32_t max, int wait
 int32_t EpollDriver::poll_add(SOCKET_HANDLE sock)
 {
 	EpollData* data = m_pEvtDataManager->getEpollData(sock);
+
+	data->lock.wLock();
 	data->sock = sock;
 	data->package = nullptr;
-	data->events = EPOLLIN;
+	data->events = EPOLLERR | EPOLLHUP | EPOLLRDHUP;
 	data->type = IO_UNKNOW;
+	
 
 	struct epoll_event ev;
 	ev.events = data->events;
 	ev.data.ptr = data;
 
-	if (epoll_ctl(m_epollHandle, EPOLL_CTL_ADD, sock, &ev) == -1) {
-		return 1;
+	int32_t ret = 0;
+	if (epoll_ctl(m_epollHandle, EPOLL_CTL_ADD, sock, &ev) == -1)
+	{
+		LOG_WARN("poll_add failed cur events[%d] cur type[%d]", data->events, data->type);
+		ret = -1;
 	}
-	return 0;
+	data->lock.wUnlock();
+
+	return ret;
 }
 
 int32_t EpollDriver::poll_del(SOCKET_HANDLE sock)
@@ -239,16 +315,14 @@ int32_t EpollDriver::poll_del(SOCKET_HANDLE sock)
 
 int32_t EpollDriver::poll_listen(SOCKET_HANDLE sock)
 {
-	EpollData* data = m_pEvtDataManager->getEpollData(sock);
-	if (poll_add(sock) != 0)
+	if (poll_add(sock) != 0 || addEvent(sock, IO_Accept, EPOLLIN) != 0)
+	{
 		return -1;
-
-	data->type |= IO_Accept;
-
+	}
 	return 0;
 }
 
-int32_t EpollDriver::poll_connect(const short port, const char* ip)
+int32_t EpollDriver::poll_connect(SERVER_HANDLE handle, const short port, const char* ip)
 {
 	return 0;
 }
@@ -259,15 +333,26 @@ int32_t EpollDriver::poll_send(SOCKET_HANDLE sock, void* buf, int32_t sz)
 	if (package->isFillComplete())
 	{
 		EpollData* data = m_pEvtDataManager->getEpollData(sock);
+
+		data->lock.wLock();
+
 		data->sock = sock;
 		data->type |= IO_Write;
 		data->events |= EPOLLOUT;
-		data->sendPackage = package;
+		data->sendPackages.push(package);
 
 		struct epoll_event ev;
 		ev.events = data->events;
 		ev.data.ptr = data;
-		epoll_ctl(m_epollHandle, EPOLL_CTL_MOD, sock, &ev);
+		
+		uint32_t ret = 0;
+		if (epoll_ctl(m_epollHandle, EPOLL_CTL_MOD, sock, &ev) == -1)
+		{
+			LOG_WARN("poll_send failed cur events[%d] cur type[%d]", data->events, data->type);
+			ret = -1;
+		}
+		data->lock.wUnlock();
+		return ret;
 	}
 	else
 	{
@@ -279,14 +364,65 @@ int32_t EpollDriver::poll_send(SOCKET_HANDLE sock, void* buf, int32_t sz)
 
 int32_t EpollDriver::poll_recv(SOCKET_HANDLE sock)
 {
-	EpollData* data = m_pEvtDataManager->getEpollData(sock);
-	
-	data->events |= EPOLLIN;
-	data->type |= IO_Read;
-	data->sock = sock;
-	data->package  = CSocketDriver::getInstance()->getSocketPackage(sock);
+	return recv(sock);
+}
+//////////////////////////////////////////////////////////////////////////
+int32_t	EpollDriver::recv(SOCKET_HANDLE sock, Package* package /*= nullptr*/)
+{
+	package = package == nullptr ? CSocketDriver::getInstance()->getSocketPackage(sock) : package;
+	if (nullptr == package)
+		return -1;
 
-	return 0;
+	return addEvent(sock, IO_Read, EPOLLIN, package);
 }
 
-#endif//(CUR_PLATFROM == PLATFROM_LINUX)
+int32_t EpollDriver::clearEvent(SOCKET_HANDLE sock, uint32_t event, SocketIOType ioType)
+{
+	EpollData* data = m_pEvtDataManager->getEpollData(sock);
+	ASSERT(data != nullptr);
+
+	data->lock.wLock();
+	DEL_BIT(data->events, event);
+	DEL_BIT(data->type, ioType);
+
+	struct epoll_event ev;
+	ev.events = data->events;
+	ev.data.ptr = data;
+
+	uint32_t ret = 0;
+	if (epoll_ctl(m_epollHandle, EPOLL_CTL_MOD, sock, &ev) == -1)
+	{
+		LOG_WARN("clear Event failed cur events[%d] cur type[%d]", data->events, data->type);
+		ret = -1;
+	}
+	data->lock.wUnlock();
+	return ret;
+}
+
+int32_t EpollDriver::addEvent(SOCKET_HANDLE sock, SocketIOType ioType, uint32_t events, Package* recvPackage /*=nullptr*/)
+{
+	EpollData* data = m_pEvtDataManager->getEpollData(sock);
+	ASSERT(data != nullptr);
+
+	data->lock.wLock();
+
+	data->sock = sock;
+	data->recvPackage = package;
+	data->events |= events;
+	data->type = ioType;
+
+	struct epoll_event ev;
+	ev.events = data->events;
+	ev.data.ptr = data;
+
+	int32_t ret = 0;
+	if (epoll_ctl(m_epollHandle, EPOLL_CTL_MOD, sock, &ev) == -1)
+	{
+		LOG_WARN("add Event failed cur events[%d] cur type[%d]", data->events, data->type);
+		ret = -1;
+	}
+	
+	data->lock.wUnlock();
+	return ret;
+}
+#endif//(CUR_PLATFROM == PLATFORM_UNKNOW)

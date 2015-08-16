@@ -8,8 +8,8 @@
 #define __2015_03_29_TIMER_WORKDER_H__
 
 #include <cstdint>
+#include "common.h"
 #include "Thread.h"
-#include "Server.h"
 #include "SingleInstance.h"
 
 class TimerCore;

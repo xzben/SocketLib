@@ -52,7 +52,15 @@ int CConfigFile::checkValue(char *line)
 	char *k_start, *k_end;  // 指示 key 在 line 中的起始和结束位置
 	char *v_start, *v_end;  // 只是 value 在 line 中的起始和结束位置
 
+	char* comment = strchr(line, '#');
+	if (comment != NULL)
+	{
+		*comment = '\0';
+	}
+
 	int line_len = strlen(line);
+	if (line_len <= 0)
+		return 0;
 
 	k_start = &line[0];
 	v_end = &line[line_len - 1];
@@ -68,6 +76,7 @@ int CConfigFile::checkValue(char *line)
 	{
 		return (0); //正常结束
 	}
+	
 
 	v_start = k_end = strchr(line, '=');
 	//找不到等号说明此行不是一个有效的
@@ -229,6 +238,11 @@ void CConfigFile::dumpConfigs()
 		printf("%s = %s\n", it->first.c_str(), it->second.c_str());
 		it++;
 	}
+}
+
+CConfigFile::ValueContainer&	CConfigFile::getValueMap()
+{
+	return m_values;
 }
 
 int	 CConfigFile::getInt(const char *key, int def)

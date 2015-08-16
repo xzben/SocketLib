@@ -2,7 +2,7 @@
 
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	#include <MSWSock.h>
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 	#include <fcntl.h>
 #endif
 
@@ -121,7 +121,7 @@ bool  SocketOption::setBlockMode(Socket& sock, bool bBlock)
 	u_long iMode = bBlock ? 0 : 1;
 	return (SOCKET_ERROR != ioctlsocket(hSock, FIONBIO, &iMode));
 
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 
 	int32_t flag;
 	if (flag = fcntl(hSock, F_GETFL, 0) < 0)
@@ -145,7 +145,7 @@ bool  SocketOption::isBlockMode(Socket& sock)
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	//return (SOCKET_ERROR != ioctlsocket(hSock, FIONBIO, ));
 	return sock.isBlocked();
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 
 	int32_t flag;
 	if (flag = fcntl(hSock, F_GETFL, 0) < 0)

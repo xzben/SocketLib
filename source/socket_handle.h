@@ -24,7 +24,7 @@
 ////////////////////////////////////////////////////////
 	typedef SOCKET					SOCKET_HANDLE;
 	#define	INVALID_SOCKET_HANDLE			INVALID_SOCKET
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 	#include <sys/socket.h>
 	#include <sys/types.h>
 	#include <sys/select.h>

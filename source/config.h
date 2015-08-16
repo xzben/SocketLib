@@ -7,20 +7,20 @@
 #ifndef __2015_03_29_CONFIG_H__
 #define __2015_03_29_CONFIG_H__
 
-#define PLATFROM_UNKNOW		0	//δ֪	  ϵͳ
+#define PLATFORM_UNKNOW		0	//δ֪	  ϵͳ
 #define PLATFORM_WIN32		1	//Windows ϵͳ
-#define PLATFROM_LINUX		2	//Linux	  ϵͳ
-#define PlATFROM_MAC		3	//Mac	  ϵͳ
+#define PLATFORM_LINUX		2	//Linux	  ϵͳ
+#define PlATFORM_MAC		3	//Mac	  ϵͳ
 
-#ifndef CUR_PLATFROM
+#ifndef CUR_PLATFORM
 	#if defined(WIN32)
 		#define CUR_PLATFROM	PLATFORM_WIN32
 	#elif defined(LINUX)
-		#define CUR_PLATFROM	PLATFROM_LINUX
+		#define CUR_PLATFROM	PLATFORM_LINUX
 	#elif defined(MAC)
-		#define CUR_PLATFROM	PlATFROM_MAC
+		#define CUR_PLATFROM	PlATFORM_MAC
 	#else
-		#define CUR_PLATFROM	PLATFROM_UNKNOW
+		#define CUR_PLATFROM	PLATFORM_UNKNOW
 	#endif
 #endif//--!!CUR_PLATFROM
 

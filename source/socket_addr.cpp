@@ -40,7 +40,7 @@ void InterAddress::open(int32_t Port, const char* szIp /*=nullptr*/)
 	{
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 		m_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 		m_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 #endif
 	}
@@ -48,7 +48,7 @@ void InterAddress::open(int32_t Port, const char* szIp /*=nullptr*/)
 	{
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 		m_addr.sin_addr.S_un.S_addr = inet_addr(szIp);
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 		m_addr.sin_addr.s_addr = inet_addr(szIp);
 #endif
 	}

@@ -3,12 +3,14 @@
 #include "Condition.h"
 #include "ServerManager.h"
 #include "GlobalController.h"
+#include "Task.h"
+#include "MasterServer.h"
+#include "DTQueue.h"
+
 #include <queue>
 #include <iostream>
 #include <cassert>
 #include <mutex>
-#include "DTQueue.h"
-#include "MasterServer.h"
 
 class WorkThreadPool : public DTQueue<CServer*>
 {

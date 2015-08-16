@@ -87,8 +87,31 @@ public:
 	Package* package;
 };
 
+class ConnectOverlappedData : public OverlappedData
+{
+public:
+	static void free(ConnectOverlappedData*& lp)
+	{
+		SAFE_DELETE(lp);
+	}
+	static ConnectOverlappedData* create(SERVER_HANDLE handle)
+	{
+		return new ConnectOverlappedData(handle);
+	}
+
+	ConnectOverlappedData(SERVER_HANDLE handle)
+		: OverlappedData(IO_Connect)
+		, requestServer(handle)
+	{
+
+	}
+	
+	SERVER_HANDLE  requestServer;
+};
+
 typedef OverlappedData*			LPOverlappedData;
 typedef AcceptOverlappedData*	LPAcceptOverlappedData;
+typedef ConnectOverlappedData*	LPConnectOverlappedData;
 typedef RWOverlappedData*		LPRWOverlappedData;
 //////////////////////////////////////////////////////////////////////////
 IOCPDriver::IOCPDriver()
@@ -133,10 +156,10 @@ int32_t IOCPDriver::poll_event_process(IOEvent *events, int32_t max, int waittim
 			}
 			//////////////////////////////////////////////////////////////////////////
 			//不正常的error
-			LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus 失败 >> error [%d] socket[%d] ", dwErrorCode, sock);
+			LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus failed >> error [%d] socket[%d] ", dwErrorCode, sock);
 			if (ERROR_OPERATION_ABORTED == dwErrorCode) //Accept用于接收新连接的socket关闭
 			{
-				LOG_FATAL("IOCPDriver >> GetQueuedCompletionStatus >> Accept用于接收新连接的socket关闭");
+				LOG_FATAL("IOCPDriver >> GetQueuedCompletionStatus >> Accept 用于接收新连接的socket关闭");
 				OverlappedData::free(lpOverlapped);
 				accept(sock);
 
@@ -145,14 +168,20 @@ int32_t IOCPDriver::poll_event_process(IOEvent *events, int32_t max, int waittim
 			if (IO_Accept == lpOverlapped->OperationType) //Accept上的socket关闭，重新投递监听
 			{
 				LOG_ERROR("IOCPDriver >> GetQueuedCompletionStatus 失败 >> Accept上的socket关闭，重新投递监听");
-				//((AcceptSocket*)pSock)->addAccept((AcceptSocket::LPAcceptOverlappedData)lpOverlapped);
 				OverlappedData::free(lpOverlapped);
 				accept(sock);
 			}
+			else if(IO_Connect == lpOverlapped->OperationType)
+			{
+				LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus 链接失败");
+				OverlappedData::free(lpOverlapped);
+				event.evt_type = IO_Error;
+				Socket connectSock(sock);
+				connectSock.close();
+			}
 			else//客户端异常断开，拔网线，断电，终止进程
 			{
-				LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus failed监听的 ClientSocket [%d] 意外关闭", sock);
-				//((ClientSocket*)pSock)->release();
+				LOG_DEBUG("IOCPDriver >> GetQueuedCompletionStatus failed 监听的 ClientSocket [%d] 意外关闭", sock);
 				OverlappedData::free(lpOverlapped);
 				event.evt_type = IO_Close;
 			}
@@ -206,12 +235,20 @@ int32_t IOCPDriver::poll_event_process(IOEvent *events, int32_t max, int waittim
 				package->offsetData(sendSize);
 				send(sock, package);
 			}
+			else if (IO_Connect == lpOverlapped->OperationType)
+			{
+				LPConnectOverlappedData conOvelapped = (LPConnectOverlappedData)(lpOverlapped);
+				event.evt_type = IO_Connect;
+				event.connect_server = conOvelapped->requestServer;
+				Socket conSock(sock);
+				conSock.updateConnectContext();
+				conSock.dettach();
+			}
 			OverlappedData::free(lpOverlapped);
 		}
 	} while (0);
 
 	event.evt_sock = sock;
-
 	events[0] = event;
 
 	return 1;
@@ -251,8 +288,49 @@ int32_t IOCPDriver::poll_listen(SOCKET_HANDLE sock)
 	return 0;
 }
 
-int32_t IOCPDriver::poll_connect(const short port, const char* ip)
+int32_t IOCPDriver::poll_connect(SERVER_HANDLE handle, const short port, const char* ip)
 {
+	Socket socket(Socket::SOCK_TCP);
+	socket.setBlocked(false);
+	socket.bind(InterAddress(0));
+
+	//重置overlapped
+	LPConnectOverlappedData overlapConnect = ConnectOverlappedData::create(handle);
+	if (overlapConnect == nullptr) return -1;
+	
+	InterAddress addr(port, ip);
+
+	DWORD sendCnt;
+	SOCKET_HANDLE sock = socket.getHandle();
+	poll_add(sock);
+	
+	
+	LPFN_CONNECTEX pConnectEx;
+
+	DWORD dwBytes = 0;
+	GUID funcGuide = WSAID_CONNECTEX;
+	if (0 != ::WSAIoctl(sock, SIO_GET_EXTENSION_FUNCTION_POINTER,
+		&funcGuide, sizeof(funcGuide), &pConnectEx,
+		sizeof(pConnectEx), &dwBytes, NULL, NULL))
+	{
+		return -1;
+	}
+
+	socket.dettach();
+	//投递数据接收操作
+	if (!pConnectEx(sock,
+		addr.getAddress(), addr.getAddrLen(), NULL, 0,
+		&sendCnt, &overlapConnect->Overlapped))
+	{
+		int nErrCode = WSAGetLastError();
+		if (ERROR_IO_PENDING != nErrCode)
+		{
+			ConnectOverlappedData::free(overlapConnect);
+			LOG_ERROR("Connected [ %d | %s ] failed !", port, ip);
+			return -1;
+		}
+	}
+
 	return 0;
 }
 
@@ -302,9 +380,9 @@ int32_t		IOCPDriver::recv(SOCKET_HANDLE sock, Package* pack /*= nullptr*/)
 		int nErrCode = WSAGetLastError();
 		if (ERROR_IO_PENDING != nErrCode)
 		{
-			return -1;
 			RWOverlappedData::free(overlapRead);
 			LOG_ERROR("ClientSocket[%d], addRecv 失败", sock);
+			return -1;
 		}
 	}
 	

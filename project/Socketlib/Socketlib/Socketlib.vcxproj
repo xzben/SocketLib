@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\Atom.h" />
+    <ClInclude Include="..\..\..\source\Cluster.h" />
     <ClInclude Include="..\..\..\source\common.h" />
     <ClInclude Include="..\..\..\source\Condition.h" />
     <ClInclude Include="..\..\..\source\config.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="..\..\..\source\MasterServer.h" />
     <ClInclude Include="..\..\..\source\package.h" />
     <ClInclude Include="..\..\..\source\Ref.h" />
+    <ClInclude Include="..\..\..\source\RWLock.h" />
     <ClInclude Include="..\..\..\source\Server.h" />
     <ClInclude Include="..\..\..\source\ServerManager.h" />
     <ClInclude Include="..\..\..\source\Session.h" />
@@ -43,6 +45,7 @@
     <ClInclude Include="..\..\..\source\WorkerPool.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\source\Cluster.cpp" />
     <ClCompile Include="..\..\..\source\Condition.cpp" />
     <ClCompile Include="..\..\..\source\ConfigFile.cpp" />
     <ClCompile Include="..\..\..\source\CoroutineScheduler.cpp" />
@@ -55,6 +58,7 @@
     <ClCompile Include="..\..\..\source\MasterServer.cpp" />
     <ClCompile Include="..\..\..\source\package.cpp" />
     <ClCompile Include="..\..\..\source\Ref.cpp" />
+    <ClCompile Include="..\..\..\source\RWLock.cpp" />
     <ClCompile Include="..\..\..\source\Server.cpp" />
     <ClCompile Include="..\..\..\source\ServerManager.cpp" />
     <ClCompile Include="..\..\..\source\Session.cpp" />
@@ -78,13 +82,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -111,7 +115,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;SOCKETLIB_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;SOCKETLIB_BUILD;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>

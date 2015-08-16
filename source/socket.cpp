@@ -360,7 +360,7 @@ bool Socket::setBlocked(bool bIsBlock)
 	u_long iMode = bIsBlock ? 0 : 1;
 	return (SOCKET_ERROR != ioctlsocket(hSock, FIONBIO, &iMode));
 
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 
 	int32_t flag;
 	if (flag = fcntl(hSock, F_GETFL, 0) < 0)
@@ -381,7 +381,7 @@ bool Socket::isBlocked()
 		return false;
 #if (CUR_PLATFROM == PLATFORM_WIN32)
 	return m_bIsBlock;
-#elif (CUR_PLATFROM == PLATFROM_LINUX)
+#elif (CUR_PLATFROM == PLATFORM_UNKNOW)
 
 	int32_t flag;
 	if (flag = fcntl(m_hSocket, F_GETFL, 0) < 0)
@@ -399,6 +399,12 @@ bool Socket::updateAcceptContext()
 		(char *)&(m_hSocket), sizeof(m_hSocket));
 }
 
+bool Socket::updateConnectContext()
+{
+	return 0 == setsockopt(m_hSocket, 
+		SOL_SOCKET, SO_UPDATE_CONNECT_CONTEXT,
+		NULL, 0);
+}
 #endif
 //////////////////////////////////////////////////////////////////////////
 //用于自动装载 SocketLib 用

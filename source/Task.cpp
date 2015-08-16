@@ -5,13 +5,13 @@
 //CData
 //禁用char* 类型
 template<>
-char* CData::pop<char*, 0>(char*)
+char* CData::pop<char*>(const int index, char*)
 {
 	return nullptr;
 }
 
 template<>
-const char* CData::pop<const char*, 0>(const char *)
+const char* CData::pop<const char*>(int index, const char *)
 {
 	return nullptr;
 }

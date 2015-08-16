@@ -30,6 +30,7 @@ public:
 	{
 		m_data = data;
 	}
+
 	virtual ~DataBlock()
 	{
 
@@ -65,8 +66,8 @@ public:
 		m_datas.push_back(new DataBlock<Type>(data));
 	}
 
-	template<typename Type, int index>
-	Type	pop(Type defValue)
+	template<typename Type>
+	Type	pop(const int index, Type defValue)
 	{
 		Type ret = defValue;
 		
@@ -100,6 +101,7 @@ private:
 	}
 	std::vector<DataBlockBase*>	m_datas;
 };
+
 class CTask
 {
 public:

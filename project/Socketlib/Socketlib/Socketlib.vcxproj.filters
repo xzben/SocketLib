@@ -8,6 +8,9 @@
     <Filter Include="socket">
       <UniqueIdentifier>{22e72985-f30d-4b01-9442-d24c4df1585f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="functions">
+      <UniqueIdentifier>{35055aab-9d0f-4f97-bc96-82168990927c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\Atom.h">
@@ -25,19 +28,10 @@
     <ClInclude Include="..\..\..\source\ConfigFile.h">
       <Filter>base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\CoroutineScheduler.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\source\DTQueue.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\GlobalController.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\LogServer.h">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\source\MasterServer.h">
       <Filter>base</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\Ref.h">
@@ -94,17 +88,29 @@
     <ClInclude Include="..\..\..\source\package.h">
       <Filter>socket</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\CWatchDog.h">
-      <Filter>base</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\source\epoll.h">
       <Filter>socket</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\source\MasterServer.h">
+      <Filter>functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\LogServer.h">
+      <Filter>functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\CWatchDog.h">
+      <Filter>functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\CoroutineScheduler.h">
+      <Filter>functions</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\RWLock.h">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\Cluster.h">
+      <Filter>functions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\main.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\TimerWorker.cpp">
       <Filter>base</Filter>
     </ClCompile>
@@ -127,15 +133,6 @@
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Task.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\LogServer.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\MasterServer.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\source\CoroutineScheduler.cpp">
       <Filter>base</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\Session.cpp">
@@ -171,11 +168,27 @@
     <ClCompile Include="..\..\..\source\package.cpp">
       <Filter>socket</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\CWatchDog.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\source\epoll.cpp">
       <Filter>socket</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\RWLock.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\MasterServer.cpp">
+      <Filter>functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\LogServer.cpp">
+      <Filter>functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\CWatchDog.cpp">
+      <Filter>functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\CoroutineScheduler.cpp">
+      <Filter>functions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\main.cpp" />
+    <ClCompile Include="..\..\..\source\Cluster.cpp">
+      <Filter>functions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

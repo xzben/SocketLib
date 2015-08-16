@@ -4,7 +4,7 @@
 
 CRef::CRef()
 {
-	m_ref = new int(1);
+	m_ref = new int32_t(1);
 }
 
 CRef::~CRef()

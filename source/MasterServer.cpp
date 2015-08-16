@@ -4,6 +4,7 @@
 #include "GlobalController.h"
 #include "SocketDriver.h"
 #include "CWatchDog.h"
+#include "Cluster.h"
 
 CMasterServer::CMasterServer()
 {
@@ -20,6 +21,7 @@ void CMasterServer::initInstance()
 {
 	//timeout(100, SERVER_TIMEOUT_SELECTOR(CMasterServer::tick));
 	m_pWatchDog = new CWatchDog(6000);
+
 }
 
 void CALLBACK CMasterServer::tick(CData *pData)

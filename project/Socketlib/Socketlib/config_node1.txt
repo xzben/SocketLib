@@ -1,9 +1,9 @@
 #
-# 服务器  主节点 配置表
+# 服务器  节点一 配置表
 #
 
 logFile 	= "log"			# 配置表的名字
 logLevel 	= "info"		# 日志等级 all、debug、info、warn、error、fatal、off
 workThread 	= 8 			# 工作核心线程数
-clusterName	= "main"		# 节点名字
+clusterName	= "node1"		# 节点名字
 clusterFile	= "clustername.txt"	# 各个节点的地址配置信息

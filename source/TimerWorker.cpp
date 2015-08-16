@@ -2,7 +2,6 @@
 #include "GlobalController.h"
 #include "WorkerPool.h"
 #include "Task.h"
-#include "MasterServer.h"
 #include <ctime>
 #include <iostream>
 #include <mutex>
@@ -345,11 +344,11 @@ CTimerWorker::~CTimerWorker()
 
 }
 
-
 bool CTimerWorker::start()
 {
 	return CThread::start();
 }
+
 void CTimerWorker::run()
 {
 	ThreadGuard guard;

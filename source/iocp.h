@@ -15,7 +15,7 @@ public:
 	virtual int32_t poll_add(SOCKET_HANDLE sock) override;
 	virtual int32_t poll_del(SOCKET_HANDLE sock) override;
 	virtual int32_t poll_listen(SOCKET_HANDLE sock) override;
-	virtual int32_t poll_connect(const short port, const char* ip) override;
+	virtual int32_t poll_connect(SERVER_HANDLE handle, const short port, const char* ip) override;
 	virtual int32_t poll_send(SOCKET_HANDLE sock, void* buf, int32_t sz) override;
 	virtual int32_t poll_recv(SOCKET_HANDLE sock) override;
 protected:

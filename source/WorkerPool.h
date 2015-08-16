@@ -8,11 +8,11 @@
 #define __2015_03_29_WORKER_POOL_H__
 
 #include <cstdint>
-#include "Task.h"
-#include "Server.h"
+#include "common.h"
 #include "SingleInstance.h"
 
 class WorkThreadPool;
+class CTask;
 
 class CWorkerPool : public SingleInstance<CWorkerPool>
 {

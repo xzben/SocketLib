@@ -55,7 +55,7 @@ void TimeValue::set(int32_t sec, int32_t msec /*= 0*/, int32_t usec /*= 0*/)
 	normalize();
 }
 
-#if (CUR_PLATFROM == PLATFROM_LINUX)
+#if (CUR_PLATFROM == PLATFORM_UNKNOW)
 struct timeval* TimeValue::getTimeval() const
 {
 	TimeValue* pThis = const_cast<TimeValue*>(this);

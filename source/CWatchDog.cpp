@@ -1,6 +1,7 @@
 #include "CWatchDog.h"
 #include "SocketDriver.h"
 #include "GlobalController.h"
+#include "package.h"
 
 CWatchDog::CWatchDog(short port, const char* ip /*=nullptr*/)
 {
@@ -23,17 +24,22 @@ CWatchDog::~CWatchDog()
 	CSocketDriver::getInstance()->delSocketServerMap(m_listenSock);
 }
 
+void CWatchDog::connect(short port, const char* ip)
+{
+	CSocketDriver::getInstance()->connect(getServerHandle(), port, ip);
+}
+
 void CWatchDog::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE source, CData *pData)
 {
 	ASSERT(type == TSK_SOCKET);
-	SocketIOType ioType = pData->pop<SocketIOType, 0>(IO_UNKNOW);
-	SOCKET_HANDLE sock = pData->pop<SOCKET_HANDLE, 1>(INVALID_SOCKET);
+	SocketIOType ioType = pData->pop<SocketIOType>(0, IO_UNKNOW);
+	SOCKET_HANDLE sock = pData->pop<SOCKET_HANDLE>(1, INVALID_SOCKET);
 
 	switch (ioType)
 	{
 		case IO_Accept:
 		{
-			InterAddress remoteAddress = pData->pop<InterAddress, 2>(InterAddress());
+			InterAddress remoteAddress = pData->pop<InterAddress>(2, InterAddress());
 			char ip[20];
 			int32_t port;
 			remoteAddress.getAddress(ip, port);
@@ -41,9 +47,14 @@ void CWatchDog::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE s
 			handleAccept(sock, strIp);
 			break;
 		}
+		case IO_Connect:
+		{
+			handleConnect(sock);
+			break;
+		}
 		case IO_Read:
 		{
-			Package* package = pData->pop<Package*, 2>(nullptr);
+			Package* package = pData->pop<Package*>(2, nullptr);
 			handleMsg(sock, package);
 			Package::free(package);
 			break;
@@ -62,6 +73,12 @@ void CWatchDog::handleAccept(SOCKET_HANDLE sock, std::string &RemoteIp)
 	LOG_INFO("handle socket accept [%d] address[%s] [%d]", sock, RemoteIp.c_str(), count++);
 	CSocketDriver::getInstance()->accept(getServerHandle(), sock);
 
+}
+
+void CWatchDog::handleConnect(SOCKET_HANDLE sock)
+{
+	Socket socket(sock);
+	LOG_INFO("handle socket[%d] connect succes", sock);
 }
 
 void CWatchDog::handleClose(SOCKET_HANDLE sock)

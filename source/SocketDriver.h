@@ -33,7 +33,7 @@ class CSocketDriver : public CThread, public SingleInstance<CSocketDriver>
 	friend class CWatchDog;
 public:
 	SOCKET_HANDLE	 listen(SERVER_HANDLE server, const short port, const char* ip = nullptr, int backlog = 10);
-	int32_t	 connect(const short port, const char* ip);
+	int32_t	 connect(SERVER_HANDLE handle, const short port, const char* ip);
 	int32_t  send(SOCKET_HANDLE sock, void* buffer, int sz);
 	int32_t  accept(SERVER_HANDLE server, SOCKET_HANDLE sock);
 	int32_t  reject(SOCKET_HANDLE sock);
@@ -51,6 +51,7 @@ protected:
 	void	handleRecv(IOEvent &event);
 	void	handleSend(IOEvent &event);
 	void	handleClose(IOEvent &event);
+	void	handleConnect(IOEvent &event);
 
 	SERVER_HANDLE getListenServer(SOCKET_HANDLE listenSock);
 	SOCKET_HANDLE getListenSocket(SERVER_HANDLE handle);
@@ -63,6 +64,7 @@ private:
 	typedef std::unordered_map<SOCKET_HANDLE, Package*>  Sock2Package;
 	Sock2Package	m_clientPackages;
 	std::set<SOCKET_HANDLE> m_clientSet;
+	std::mutex				m_lockPackages;
 
 	typedef std::unordered_map<SOCKET_HANDLE, SERVER_HANDLE>  ListenSock2Server;
 	typedef std::unordered_map<SERVER_HANDLE, SOCKET_HANDLE>  Server2ListenSock;

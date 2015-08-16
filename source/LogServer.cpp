@@ -48,7 +48,7 @@ LOG_LEVEL CLogServer::getLevelByString(std::string level)
 void CLogServer::excuteOneTask(TaskType type, SESSION_ID session, SERVER_HANDLE source, CData *pData)
 {
 	assert(type == TaskType::SYS_LOG);
-	std::string log = pData->pop<std::string, 0>("");
+	std::string log = pData->pop<std::string>(0, "");
 
 	
 	struct tm now = CTimerWorker::getInstance()->getCurTime();

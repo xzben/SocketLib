@@ -25,12 +25,10 @@ void CSocketDriver::initInstance()
 Package*	CSocketDriver::resetSocketPackage(SOCKET_HANDLE sock)
 {
 	Package* ret = nullptr;
-	{
-		auto it = m_clientSet.find(sock);
-		if (it == m_clientSet.end())
-			return ret;
-	}
+	m_lockPackages.lock();
 
+	auto it = m_clientSet.find(sock);
+	if (it != m_clientSet.end())
 	{
 		auto it = m_clientPackages.find(sock);
 		if (it == m_clientPackages.end())
@@ -49,30 +47,34 @@ Package*	CSocketDriver::resetSocketPackage(SOCKET_HANDLE sock)
 		}
 	}
 
+	m_lockPackages.unlock();
 	return ret;
 }
 
 bool CSocketDriver::addClientSocket(SOCKET_HANDLE sock)
 {
+	bool ret = false;
+
+	m_lockPackages.lock();
 	auto it = m_clientSet.find(sock);
 	if (it == m_clientSet.end())
 	{
 		m_clientSet.insert(sock);
-		return true;
+		ret = true;
 	}
+	m_lockPackages.unlock();
 
-	return false;
+	return ret;
 }
 
 Package* CSocketDriver::getSocketPackage(SOCKET_HANDLE sock)
 {
 	Package* ret = nullptr;
-	{
-		auto it = m_clientSet.find(sock);
-		if (it == m_clientSet.end())
-			return ret;
-	}
 
+	m_lockPackages.lock();
+
+	auto it = m_clientSet.find(sock);
+	if (it != m_clientSet.end())
 	{
 		auto it = m_clientPackages.find(sock);
 		if (it == m_clientPackages.end())
@@ -86,6 +88,8 @@ Package* CSocketDriver::getSocketPackage(SOCKET_HANDLE sock)
 		}
 	}
 	
+	m_lockPackages.unlock();
+
 	return ret;
 }
 
@@ -165,9 +169,9 @@ SOCKET_HANDLE	CSocketDriver::listen(SERVER_HANDLE server, const short port, cons
 	return listenSock;
 }
 
-int32_t CSocketDriver::connect(const short port, const char* ip)
+int32_t CSocketDriver::connect(SERVER_HANDLE handle, const short port, const char* ip)
 {
-	return m_imp->poll_connect(port, ip);
+	return m_imp->poll_connect(handle, port, ip);
 }
 
 int32_t  CSocketDriver::send(SOCKET_HANDLE sock, void* buffer, int sz)
@@ -227,6 +231,7 @@ void CSocketDriver::run()
 				handleClose(events[i]);
 				break;
 			case IO_Connect:
+				handleConnect(events[i]);
 				break;
 			default:
 				break;
@@ -258,6 +263,18 @@ void CSocketDriver::handleAccept(IOEvent &event)
 	pData->push<InterAddress>(remoteAddress);
 
 	CWorkerPool::getInstance()->addTask(listenServer, CTask::create(TSK_SOCKET, 0, SOCKET_DRIVER_HANDLE, pData));
+}
+
+void CSocketDriver::handleConnect(IOEvent &event)
+{
+	SOCKET_HANDLE conSock = event.evt_sock;
+	SERVER_HANDLE server = event.connect_server;
+
+	CData *pData = new CData;
+	pData->push<SocketIOType>(IO_Connect);
+	pData->push<SOCKET_HANDLE>(conSock);
+
+	CWorkerPool::getInstance()->addTask(server, CTask::create(TSK_SOCKET, 0, SOCKET_DRIVER_HANDLE, pData));
 }
 
 void CSocketDriver::handleRecv(IOEvent &event)

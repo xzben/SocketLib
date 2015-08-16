@@ -1,6 +1,8 @@
 #ifndef __2015_05_03_REF_H__
 #define __2015_05_03_REF_H__
 
+#include <cstdint>
+
 class NoCopyAble
 {
 private:
@@ -21,6 +23,6 @@ public:
 
 
 private:
-	int		*m_ref;
+	int32_t		*m_ref;
 };
 #endif//__2015_05_03_REF_H__
